@@ -6,7 +6,7 @@ target/
 # Eclipse artifacts, including WTP generated manifests
 .classpath
 .project
-*/.settings/
+**/.settings/
 
 # IDEA artifacts and output dirs
 *.iml
@@ -15,5 +15,3 @@ target/
 .idea
 out
 test-output
-atlassian-ide-plugin.xml
-.gradletasknamecache
