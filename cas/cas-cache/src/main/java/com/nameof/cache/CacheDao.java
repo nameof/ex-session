@@ -1,6 +1,6 @@
 package com.nameof.cache;
 
-import java.util.Enumeration;
+import java.util.Collection;
 import java.util.Map;
 /**
  * 提供将servlet session属性存储到缓存中的数据访问对象接口
@@ -16,9 +16,7 @@ public interface CacheDao {
 	
 	void setAttribute(String key, String fieldName, Object value);
 	
-	Enumeration<String> getAttributeNames(String key);
-	
-	String[] getValueNames(String key);
+	Collection<String> getAttributeKeys(String key);
 	
 	void del(String key);
 	
@@ -33,8 +31,4 @@ public interface CacheDao {
 	void setPersist(String key);
 	
 	boolean exists(String key);
-	
-	void setWithExpire(String key, Object value, int expire);
-	
-	Object get(String key);
 }

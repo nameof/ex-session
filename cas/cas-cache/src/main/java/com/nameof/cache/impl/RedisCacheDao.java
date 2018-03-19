@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
-import java.util.Enumeration;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ import com.nameof.common.utils.RedisUtil;
  * 基于Redis的缓存数据访问层
  * @author ChengPan
  */
-public class RedisCacheDao implements CacheDao{
+public class RedisCacheDao implements CacheDao {
 
 	private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 	
@@ -71,38 +71,18 @@ public class RedisCacheDao implements CacheDao{
 				serialize(value));
 	}
 
-
 	@Override
-	public Enumeration<String> getAttributeNames(String key) {
+	public Collection<String> getAttributeKeys(String key) {
 		Set<byte[]> keys = null;
 		keys = RedisUtil.getJedis().hkeys(key.getBytes(DEFAULT_CHARSET));
 		
 		if (keys == null) {
-			return null;
+			return Collections.emptySet();
 		}
 		
 		Set<String> skeys = new HashSet<String>();
 		for (byte[] k : keys) {
 			skeys.add(new String(k));
-		}
-		return new Vector<String>(skeys).elements();
-	}
-
-
-	@Override
-	public String[] getValueNames(String key) {
-		Set<byte[]> keys = null;
-		keys = RedisUtil.getJedis().hkeys(key.getBytes(DEFAULT_CHARSET));
-		
-		if (keys == null) {
-			return null;
-		}
-		
-		String[] skeys = new String[keys.size()];
-		int i = 0;
-		for (byte[] k : keys) {
-			skeys[i] = new String(k);
-			i++;
 		}
 		return skeys;
 	}
@@ -131,21 +111,7 @@ public class RedisCacheDao implements CacheDao{
 	public boolean exists(String key) {
 		return RedisUtil.getJedis().exists(key.getBytes(DEFAULT_CHARSET));
 	}
-	
 
-
-	@Override
-	public void setWithExpire(String key, Object value, int expire) {
-		RedisUtil.getJedis().setex(key.getBytes(DEFAULT_CHARSET), expire, serialize(value));
-	}
-
-
-	@Override
-	public Object get(String key) {
-		byte[] byteVal = RedisUtil.getJedis().get(key.getBytes(DEFAULT_CHARSET));
-		return deserizlize(byteVal);
-	}
-	
 	private static byte [] serialize(Object obj) {
     	if (obj == null) {
     		return null;

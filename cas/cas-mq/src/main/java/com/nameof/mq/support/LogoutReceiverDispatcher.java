@@ -6,8 +6,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.nameof.common.utils.RedisUtil;
 import com.nameof.mq.message.Message;
@@ -25,6 +29,7 @@ import com.nameof.mq.sender.Sender;
  * @author ChengPan
  */
 //FIXME 此处存在过度设计嫌疑
+@Component
 public class LogoutReceiverDispatcher{
 	
 	/** 处理注销消息的线程实例 */
@@ -47,7 +52,7 @@ public class LogoutReceiverDispatcher{
 	private static final AtomicIntegerFieldUpdater<LogoutReceiverDispatcher> WORKER_STATE_UPDATER =
 	        AtomicIntegerFieldUpdater.newUpdater(LogoutReceiverDispatcher.class, "workerState");
 	
-	
+	@PostConstruct
 	public static void start() {
 		
 		switch (WORKER_STATE_UPDATER.get(INSTANCE)) {
@@ -65,6 +70,7 @@ public class LogoutReceiverDispatcher{
 		}
 	}
 	
+	@PreDestroy
 	public static void stop() {
 		if (WORKER_STATE_UPDATER.compareAndSet(INSTANCE, WORKER_STATE_STARTED, WORKER_STATE_SHUTDOWN)) {
 			workerThread.setHandleMsg(false);

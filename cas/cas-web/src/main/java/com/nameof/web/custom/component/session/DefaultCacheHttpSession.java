@@ -1,8 +1,12 @@
 package com.nameof.web.custom.component.session;
 
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.Vector;
 
 import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.factory.CacheDaoFactory;
@@ -40,7 +44,8 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 	/** 是否为永久性session */
 	private boolean isPersistKey = false;
 	
-	private static CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
+	@Autowired
+	private CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
 	
 	public DefaultCacheHttpSession(HttpSession session, String token) {
 		super(session);
@@ -84,13 +89,15 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 	@Override
 	public Enumeration<String> getAttributeNames() {
 		checkValid();
-		return cacheDao.getAttributeNames(token);
+		Collection<String> keys = cacheDao.getAttributeKeys(token);
+		return new Vector<String>(keys).elements();
 	}
 
 	@Override
 	public String[] getValueNames() {
 		checkValid();
-		return cacheDao.getValueNames(token);
+		Collection<String> keys = cacheDao.getAttributeKeys(token);
+		return keys.toArray(new String[keys.size()]);
 	}
 
 	@Override

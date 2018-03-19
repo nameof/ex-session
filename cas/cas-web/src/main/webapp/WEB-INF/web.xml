@@ -7,8 +7,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath:spring.xml
-			classpath:spring-component.xml
+			classpath:spring-basic.xml
 		</param-value>
 	</context-param>
 	<listener>

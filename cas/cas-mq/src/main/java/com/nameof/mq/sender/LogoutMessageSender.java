@@ -1,5 +1,7 @@
 package com.nameof.mq.sender;
 
+import org.springframework.stereotype.Component;
+
 import com.nameof.mq.message.Message;
 import com.nameof.mq.queue.RedisMessageQueue;
 
@@ -8,6 +10,7 @@ import com.nameof.mq.queue.RedisMessageQueue;
  * 
  * @author ChengPan
  */
+@Component
 public class LogoutMessageSender extends Sender {
 	
 	private static final String LOGOUT_QUEUE_NAME = "logoutQueue";
