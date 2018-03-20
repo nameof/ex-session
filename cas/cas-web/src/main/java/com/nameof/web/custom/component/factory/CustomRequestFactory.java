@@ -14,6 +14,8 @@ import com.nameof.web.custom.component.request.CustomHttpServletRequest;
 public class CustomRequestFactory implements ApplicationContextAware {
 
 	private ApplicationContext applicationCtx;
+	
+	private String requestBeanName = "customHttpServletRequest";
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationCtx)
@@ -22,7 +24,8 @@ public class CustomRequestFactory implements ApplicationContextAware {
 	}
 	
 	public CustomHttpServletRequest getWrapperedRequest(HttpServletRequest req, HttpServletResponse resp) {
-		CustomHttpServletRequest wrapper = (CustomHttpServletRequest) applicationCtx.getBean("customHttpServletRequest", req, resp);
+		CustomHttpServletRequest wrapper = (CustomHttpServletRequest) 
+				applicationCtx.getBean(requestBeanName, req, resp);
 		return wrapper;
 	}
 

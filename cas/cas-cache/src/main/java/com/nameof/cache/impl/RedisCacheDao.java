@@ -24,6 +24,7 @@ import com.nameof.common.utils.RedisUtil;
  * 基于Redis的缓存数据访问层
  * @author ChengPan
  */
+@Deprecated
 public class RedisCacheDao implements CacheDao {
 
 	private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");

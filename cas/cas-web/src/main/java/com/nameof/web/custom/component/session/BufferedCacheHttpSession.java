@@ -6,10 +6,15 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import com.nameof.cache.CacheDao;
-import com.nameof.cache.factory.CacheDaoFactory;
 
 /**
  * {@link cas.custom.component.session.BufferedCacheHttpSession}实例会在构造时
@@ -25,7 +30,9 @@ import com.nameof.cache.factory.CacheDaoFactory;
  * @author ChengPan
  */
 @Deprecated
-public class BufferedCacheHttpSession extends HttpSessionWrapper 
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class BufferedCacheHttpSession extends HttpSessionWrapper
 			implements CustomSessionProcessor {
 	
 	private static final long serialVersionUID = -248646772305855733L;
@@ -47,18 +54,19 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
     /** Session是否永不过期 */
     private boolean isPersistKey = false;
     
-    private static CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
+    @Autowired
+    private CacheDao cacheDao;
     
 	public BufferedCacheHttpSession(HttpSession session, String token) {
 		super(session);
 		this.token = token;
-		initialize();
 	}
 
 	/**
 	 * 初始化session属性信息
 	 */
 	@Override
+	@PostConstruct
 	public void initialize() {
 		
 		//获取缓存中所有"Attribute"，缓存到本地

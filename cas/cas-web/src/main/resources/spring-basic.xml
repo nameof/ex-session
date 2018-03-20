@@ -19,5 +19,7 @@
     </context:component-scan>
     
     <context:annotation-config/>
+    
+    <context:property-placeholder location="classpath:cas-config.properties"/>
 
 </beans>

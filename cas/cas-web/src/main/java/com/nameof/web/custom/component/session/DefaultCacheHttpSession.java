@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.nameof.cache.CacheDao;
-import com.nameof.cache.factory.CacheDaoFactory;
 /**
  * 默认情况下，{@link cas.custom.component.session.DefaultCacheHttpSession}实例会在构造时尝试从缓存中
  * 加载maxInactiveInterval信息（如果有的话）.<br>
@@ -51,7 +50,7 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 	private boolean isPersistKey = false;
 	
 	@Autowired
-	private CacheDao cacheDao;// = CacheDaoFactory.newCacheDaoInstance();
+	private CacheDao cacheDao;
 	
 	public DefaultCacheHttpSession(HttpSession session, String token) {
 		super(session);
