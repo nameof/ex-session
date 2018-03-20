@@ -4,9 +4,13 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.factory.CacheDaoFactory;
@@ -22,6 +26,8 @@ import com.nameof.cache.factory.CacheDaoFactory;
  * 
  * @author ChengPan
  */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 		CustomSessionProcessor {
 
@@ -45,15 +51,15 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 	private boolean isPersistKey = false;
 	
 	@Autowired
-	private CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
+	private CacheDao cacheDao;// = CacheDaoFactory.newCacheDaoInstance();
 	
 	public DefaultCacheHttpSession(HttpSession session, String token) {
 		super(session);
 		this.token = token;
-		initialize();
 	}
 
 	@Override
+	@PostConstruct
 	public void initialize() {
 		// 从缓存中读取maxInactiveInterval信息
 		Integer originalExpire = (Integer) cacheDao.getAttribute(token, CACHE_EXPIRE_KEY);

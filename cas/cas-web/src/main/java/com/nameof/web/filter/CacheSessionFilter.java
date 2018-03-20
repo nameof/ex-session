@@ -11,7 +11,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.nameof.common.utils.RedisUtil;
+import com.nameof.web.custom.component.factory.CustomRequestFactory;
 import com.nameof.web.custom.component.request.CustomHttpServletRequest;
 import com.nameof.web.custom.component.session.CustomSessionProcessor;
 
@@ -20,7 +24,11 @@ import com.nameof.web.custom.component.session.CustomSessionProcessor;
  * 请求完成之后，提交自定义Session数据到缓存中，并释放缓存连接资源
  * @author ChengPan
  */
-public class CacheSessionFilter implements Filter{
+@Component("sessionFilter")
+public class CacheSessionFilter implements Filter {
+	
+	@Autowired
+	private CustomRequestFactory requestFactory;
 
 	@Override
 	public void destroy() {
@@ -32,7 +40,7 @@ public class CacheSessionFilter implements Filter{
 			FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest)request;  
         HttpServletResponse resp = (HttpServletResponse)response;  
-        CustomHttpServletRequest wrapper = new CustomHttpServletRequest(req, resp);
+        CustomHttpServletRequest wrapper = requestFactory.getWrapperedRequest(req, resp);
         try {
         	chain.doFilter(wrapper, response);
         } finally {

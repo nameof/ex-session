@@ -42,7 +42,7 @@
 	
 	<filter>
 		<filter-name>sessionFilter</filter-name>
-		<filter-class>com.nameof.web.filter.CacheSessionFilter</filter-class>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>sessionFilter</filter-name>
