@@ -1,5 +1,6 @@
 package com.nameof.cache.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -17,18 +18,20 @@ import com.nameof.common.domain.CacheDaoType;
 @Profile(CacheDaoType.REDIS_TEMPLATE)
 public class RedisTemplateCacheDaoDefinition {
 	
+	@Value("${redis.host}")
+	private String redisHost;
+	
+	@Value("${redis.port}")
+	private int redisPort;
+	
 	@Bean
 	public JedisConnectionFactory jedisConnectionFactory() {
 		JedisConnectionFactory jcf = new JedisConnectionFactory();
 		JedisPoolConfig config = new JedisPoolConfig();
-		config.setMaxIdle(10);
-		config.setMaxTotal(64);
 		jcf.setPoolConfig(config);
 		jcf.setUsePool(true);
-		jcf.setHostName("127.0.0.1");
-		jcf.setPort(6379);
-		jcf.setTimeout(3000);
-		jcf.afterPropertiesSet();
+		jcf.setHostName(redisHost);
+		jcf.setPort(redisPort);
 		return jcf;
 	}
 	
