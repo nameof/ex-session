@@ -7,15 +7,17 @@ import java.util.concurrent.TimeUnit;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.nameof.cache.CacheDao;
 
-@Component
 public class RedissonCacheDao implements CacheDao {
 	
 	@Autowired
 	private RedissonClient redis;
+	
+	public RedissonCacheDao(RedissonClient redis) {
+		this.redis = redis;
+	}
 	
 	@Override
 	public Map<String, Object> getAllAttribute(String key) {
