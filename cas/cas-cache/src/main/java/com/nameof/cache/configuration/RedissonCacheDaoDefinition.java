@@ -9,9 +9,10 @@ import org.springframework.context.annotation.Profile;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.impl.RedissonCacheDao;
+import com.nameof.common.domain.CacheDaoType;
 
 @Configuration
-@Profile("redisson")
+@Profile(CacheDaoType.REDISSON)
 public class RedissonCacheDaoDefinition {
 	
 	@Bean

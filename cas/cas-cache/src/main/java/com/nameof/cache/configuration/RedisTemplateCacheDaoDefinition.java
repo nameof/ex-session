@@ -11,9 +11,10 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.impl.RedisTemplateCacheDao;
+import com.nameof.common.domain.CacheDaoType;
 
 @Configuration
-@Profile("redistemplate")
+@Profile(CacheDaoType.REDIS_TEMPLATE)
 public class RedisTemplateCacheDaoDefinition {
 	
 	@Bean
