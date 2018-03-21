@@ -88,7 +88,7 @@
 				<artifactId>mybatis-spring</artifactId>
 				<version>1.2.2</version>
 			</dependency>
-			<!-- jedis -->
+			<!-- redis -->
 			<dependency>
 				<groupId>redis.clients</groupId>
 				<artifactId>jedis</artifactId>
@@ -103,6 +103,12 @@
 				<groupId>org.redisson</groupId>
 				<artifactId>redisson</artifactId>
 				<version>2.11.3</version>
+			</dependency>
+			<!-- memcached -->
+			<dependency>
+				<groupId>com.whalin</groupId>
+				<artifactId>Memcached-Java-Client</artifactId>
+				<version>3.0.2</version>
 			</dependency>
 			<!-- Mysql -->
 			<dependency>
@@ -132,6 +138,11 @@
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
 				<version>1.0.7</version>
+			</dependency>
+			<dependency>
+				<artifactId>commons-logging</artifactId>
+				<groupId>commons-logging</groupId>
+				<version>1.1.3</version>
 			</dependency>
 			<!-- JSON -->
 			<dependency>
