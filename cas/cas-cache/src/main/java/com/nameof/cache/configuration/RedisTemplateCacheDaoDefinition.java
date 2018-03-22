@@ -7,12 +7,14 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 
 import redis.clients.jedis.JedisPoolConfig;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.impl.RedisTemplateCacheDao;
 import com.nameof.common.domain.CacheDaoType;
+import com.nameof.common.domain.DataFormatEnum;
 
 @Configuration
 @Profile(CacheDaoType.REDIS_TEMPLATE)
@@ -23,6 +25,9 @@ public class RedisTemplateCacheDaoDefinition {
 	
 	@Value("${redis.port}")
 	private int redisPort;
+	
+	@Value("${session.format}")
+	private DataFormatEnum format = DataFormatEnum.BINARY;
 	
 	@Bean
 	public JedisConnectionFactory jedisConnectionFactory() {
@@ -39,6 +44,10 @@ public class RedisTemplateCacheDaoDefinition {
 	public RedisTemplate<String, Object> redisTemplate(JedisConnectionFactory jcf) {
 		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 		redisTemplate.setConnectionFactory(jcf);
+		//default use jdk serialize
+		if (format == DataFormatEnum.JSON) {
+			redisTemplate.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
+		}
 		redisTemplate.afterPropertiesSet();
 		return redisTemplate;
 	}

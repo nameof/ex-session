@@ -104,6 +104,12 @@
 				<artifactId>redisson</artifactId>
 				<version>2.11.3</version>
 			</dependency>
+			<!-- redisson扩展的第三方类JDK序列化 -->
+			<dependency>
+				<groupId>de.ruedigermoeller</groupId>
+				<artifactId>fst</artifactId>
+				<version>2.54</version>
+			</dependency>
 			<!-- memcached -->
 			<dependency>
 				<groupId>com.whalin</groupId>

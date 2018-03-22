@@ -19,7 +19,7 @@ public class CacheHttpSessionFactory implements ApplicationContextAware {
 
 	private ApplicationContext applicationCtx;
 
-	@Value("${cache.httpsession.bean.name}")
+	@Value("${session.bean.name}")
 	private String sessionBeanName;
 	
 	public HttpSessionWrapper newSessionInstance(HttpSession session, String token) {
