@@ -18,6 +18,7 @@ import com.nameof.cache.impl.RedissonCacheDao;
  * 使用profile来选择缓存实现的另一种替代方式是使用FactoryBean
  * @author FactoryBean
  */
+@Deprecated
 public class CacheDaoFactoryBean implements FactoryBean<CacheDao> {
 
 	@Value("${cache.dao}")

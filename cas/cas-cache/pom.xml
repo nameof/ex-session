@@ -36,12 +36,16 @@
 		</dependency>
 		<!-- redisson扩展的第三方类JDK序列化 -->
 		<dependency>
-            <groupId>de.ruedigermoeller</groupId>
-            <artifactId>fst</artifactId>
-        </dependency>
+			<groupId>de.ruedigermoeller</groupId>
+			<artifactId>fst</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.whalin</groupId>
 			<artifactId>Memcached-Java-Client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
 		</dependency>
 		<dependency>
 			<artifactId>commons-logging</artifactId>

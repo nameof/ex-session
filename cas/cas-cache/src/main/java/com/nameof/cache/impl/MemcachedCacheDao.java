@@ -7,6 +7,10 @@ import java.util.Map;
 import com.nameof.cache.CacheDao;
 import com.whalin.MemCached.MemCachedClient;
 
+/**
+ * FIXME 直接读写整个Map属性，存在明显的并发问题
+ * @author ChengPan
+ */
 public class MemcachedCacheDao implements CacheDao {
 
 	private MemCachedClient cachedClient;

@@ -6,4 +6,5 @@ public interface CacheDaoType {
 	String REDISSON = "redisson";
 	String REDIS_TEMPLATE = "redistemplate";
 	String MEMCACHED = "memcached";
+	String EHCACHE = "ehcache";
 }

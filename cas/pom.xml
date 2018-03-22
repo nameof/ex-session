@@ -116,6 +116,11 @@
 				<artifactId>Memcached-Java-Client</artifactId>
 				<version>3.0.2</version>
 			</dependency>
+			<dependency>
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache</artifactId>
+				<version>2.10.2</version>
+			</dependency>
 			<!-- Mysql -->
 			<dependency>
 				<groupId>mysql</groupId>
