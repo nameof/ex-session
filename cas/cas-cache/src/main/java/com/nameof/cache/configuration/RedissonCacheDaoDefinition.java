@@ -30,7 +30,7 @@ public class RedissonCacheDaoDefinition {
 	@Bean
 	public RedissonClient redisson() {
 		Config config = new Config();
-		config.useSingleServer().setAddress("redis://" + redisHost + ":" + redisPort);
+		config.useSingleServer().setAddress(String.format("redis://%s:%d", redisHost, redisPort));
 		return Redisson.create(config);
 	}
 	

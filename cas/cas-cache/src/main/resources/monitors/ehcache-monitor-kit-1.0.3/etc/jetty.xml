@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<Configure id="Server" class="org.terracotta.ehcachedx.org.mortbay.jetty.Server">
+<!-- See: http://docs.codehaus.org/display/JETTY/JAAS for alternate JAAS UserRealms
+    <Set name="UserRealms">
+      <Array type="org.terracotta.ehcachedx.org.mortbay.jetty.security.UserRealm">
+        <Item>
+          <New class="org.terracotta.ehcachedx.org.mortbay.jetty.plus.jaas.JAASUserRealm">
+           <Set name="Name">ArbitraryRealmName</Set>
+           <Set name="LoginModuleName">ExistingJAASLoginModuleName</Set>
+          </New>
+        </Item>
+      </Array>
+    </Set>
+-->
+</Configure>
