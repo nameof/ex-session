@@ -7,7 +7,8 @@
   </head>
   <body>
   		welcome !  ${user.name}<br><br>
-  		<a href="${monitorUrl}">Session监控</a><br><br>
+  		当前通道：${applicationScope.sessionAccessor}<br><br>
+  		<a href="${applicationScope.monitorUrl}">Session监控</a><br><br>
   		<a href="${pageContext.request.contextPath}/logout">注销登录</a>
   </body>
 </html>
