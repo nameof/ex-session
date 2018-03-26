@@ -12,7 +12,7 @@
 	<!-- 选择SESSION缓存的实现 -->
 	<context-param>
 		<param-name>spring.profiles.active</param-name>
-		<param-value>ehcache</param-value>
+		<param-value>redisson</param-value>
 	</context-param>
 	
 	<listener>

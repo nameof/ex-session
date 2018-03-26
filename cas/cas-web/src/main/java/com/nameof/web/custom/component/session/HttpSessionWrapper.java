@@ -23,7 +23,7 @@ public abstract class HttpSessionWrapper implements HttpSession,Serializable {
 	
 	protected final HttpSession session;
 	
-    private final long creationTime = System.currentTimeMillis();
+    private long creationTime = System.currentTimeMillis();
     
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     
@@ -33,15 +33,18 @@ public abstract class HttpSessionWrapper implements HttpSession,Serializable {
     
     public HttpSessionWrapper(HttpSession session) {
         this.session = session;
-        setNew(session.isNew());
     }
     
-    @Override
+    protected void setCreationTime(long creationTime) {
+		this.creationTime = creationTime;
+	}
+
+	@Override
     public long getCreationTime() {
     	checkValid();
         return creationTime;
-    }  
-  
+    }
+    
     @Override  
     public String getId() {  
         return this.session.getId();  
@@ -116,7 +119,8 @@ public abstract class HttpSessionWrapper implements HttpSession,Serializable {
     }  
   
     @Override
-    public void invalidate() {  
+    public void invalidate() { 
+    	this.isInvalid = true;
         this.session.invalidate();  
     }  
   
@@ -126,7 +130,7 @@ public abstract class HttpSessionWrapper implements HttpSession,Serializable {
         return this.isNew;
     }
     
-    public void setNew(boolean isNew) {
+    protected void setNew(boolean isNew) {
     	checkValid();
     	this.isNew = isNew;
     }

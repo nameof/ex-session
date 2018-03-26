@@ -41,7 +41,10 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
     private static final int DEFAULT_EXPIRE = 60 * 30;
     
     /** 用于存储maxInactiveInterval到缓存的key */
-    private static final String CACHE_EXPIRE_KEY = "maxInactiveInterval";
+    private static final String CACHE_EXPIRE_KEY = "@maxInactiveInterval";
+    
+    /** 存储session的CreateTime */
+	private static final String CACHE_CREATE_TIME_KEY = "@sessionCreateTime";
     
     /** 本地属性集合 */
     private Map<String,Object> attributes = new ConcurrentHashMap<>();
@@ -69,6 +72,10 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
 	@PostConstruct
 	public void initialize() {
 		
+		setNew(!cacheDao.exists(token));
+		
+		setCreateTime();
+		
 		//获取缓存中所有"Attribute"，缓存到本地
 		attributes.putAll(cacheDao.getAllAttribute(token));
 		
@@ -80,6 +87,14 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
 			}
 			this.maxInactiveInterval = expire;
 		}
+	}
+	
+	private void setCreateTime() {
+		if (isNew) {
+			cacheDao.setAttribute(token, CACHE_CREATE_TIME_KEY, getCreationTime());
+			return;
+		}
+		setCreationTime((Long) cacheDao.getAttribute(token, CACHE_CREATE_TIME_KEY));
 	}
 
 	@Override

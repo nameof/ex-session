@@ -39,7 +39,12 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 	 * 一旦调用setMaxInactiveInterval，就会把maxInactiveInterval值存入缓存，
 	 * 以CACHE_EXPIRE_KEY为token的fieldKey进行存储
 	 */
-	private static final String CACHE_EXPIRE_KEY = "maxInactiveInterval";
+	private static final String CACHE_EXPIRE_KEY = "@maxInactiveInterval";
+	
+	/**
+	 * 存储session的CreateTime
+	 */
+	private static final String CACHE_CREATE_TIME_KEY = "@sessionCreateTime";
 
 	/** session id */
 	private final String token;
@@ -60,6 +65,11 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 	@Override
 	@PostConstruct
 	public void initialize() {
+		
+		setNew(!cacheDao.exists(token));
+		
+		setCreateTime();
+
 		// 从缓存中读取maxInactiveInterval信息
 		Integer originalExpire = (Integer) cacheDao.getAttribute(token, CACHE_EXPIRE_KEY);
 		if (originalExpire != null) {
@@ -68,6 +78,14 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 			}
 			this.maxInactiveInterval = originalExpire;
 		}
+	}
+
+	private void setCreateTime() {
+		if (isNew) {
+			cacheDao.setAttribute(token, CACHE_CREATE_TIME_KEY, getCreationTime());
+			return;
+		}
+		setCreationTime((Long) cacheDao.getAttribute(token, CACHE_CREATE_TIME_KEY));
 	}
 
 	@Override
@@ -121,7 +139,6 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 	public void invalidate() {
 		checkValid();
 		super.invalidate();//invalidate原始HttpSession
-		this.isInvalid = true;
 		cacheDao.del(token);
 	}
 	

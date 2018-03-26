@@ -32,8 +32,6 @@ public class CustomHttpServletRequest extends HttpServletRequestWrapper {
     
     public static final String COOKIE_SESSION_KEY = "token";
     
-    private boolean isNewSession = false;
-    
     @Autowired
     private CacheHttpSessionFactory sessionFactory;
     
@@ -52,12 +50,10 @@ public class CustomHttpServletRequest extends HttpServletRequestWrapper {
         }
         String token = CookieUtil.getCookieValue(this, COOKIE_SESSION_KEY);
         if (StringUtils.isBlank(token)) {
-        	isNewSession = true;
         	token = UUID.randomUUID().toString();
         	CookieUtil.addCookie(response, COOKIE_SESSION_KEY, token);
         }
         HttpSessionWrapper session = sessionFactory.newSessionInstance(super.getSession(), token);
-        session.setNew(isNewSession);
         
         this.session = session;
         return session;
