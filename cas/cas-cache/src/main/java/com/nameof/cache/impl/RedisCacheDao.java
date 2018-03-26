@@ -70,6 +70,11 @@ public class RedisCacheDao implements CacheDao {
 		RedisUtil.getJedis().hset(key.getBytes(DEFAULT_CHARSET), fieldName.getBytes(DEFAULT_CHARSET),
 				serialize(value));
 	}
+	
+	@Override
+	public void removeAttribute(String key, String fieldName) {
+		RedisUtil.getJedis().hdel(key.getBytes(DEFAULT_CHARSET), fieldName.getBytes(DEFAULT_CHARSET));
+	}
 
 	@Override
 	public Collection<String> getAttributeKeys(String key) {

@@ -45,6 +45,11 @@ public class RedisTemplateCacheDao implements CacheDao {
 	public void setAttribute(String key, String fieldName, Object value) {
 		hashOpt.put(key, fieldName, value);
 	}
+	
+	@Override
+	public void removeAttribute(String key, String fieldName) {
+		hashOpt.delete(key, fieldName);
+	}
 
 	@Override
 	public Collection<String> getAttributeKeys(String key) {

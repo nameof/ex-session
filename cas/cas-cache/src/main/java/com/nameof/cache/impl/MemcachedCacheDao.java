@@ -43,6 +43,13 @@ public class MemcachedCacheDao implements CacheDao {
 		map.put(fieldName, value);
 		cachedClient.set(key, map);
 	}
+	
+	@Override
+	public void removeAttribute(String key, String fieldName) {
+		Map<String, Object> map = getMap(key);
+		map.remove(fieldName);
+		cachedClient.set(key, map);
+	}
 
 	@Override
 	public Collection<String> getAttributeKeys(String key) {

@@ -68,6 +68,16 @@ public class EhCacheDao implements CacheDao {
 	}
 
 	@Override
+	public void removeAttribute(String key, String fieldName) {
+		Element element = cache.get(key);
+		if (element != null) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> map = (Map<String, Object>) element.getObjectValue();
+			map.remove(fieldName);
+		}
+	}
+
+	@Override
 	public Collection<String> getAttributeKeys(String key) {
 		Element element = cache.get(key);
 		if (element == null) {

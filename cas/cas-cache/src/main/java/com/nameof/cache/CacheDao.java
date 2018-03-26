@@ -16,6 +16,8 @@ public interface CacheDao {
 	
 	void setAttribute(String key, String fieldName, Object value);
 	
+	void removeAttribute(String key, String fieldName);
+	
 	Collection<String> getAttributeKeys(String key);
 	
 	void del(String key);

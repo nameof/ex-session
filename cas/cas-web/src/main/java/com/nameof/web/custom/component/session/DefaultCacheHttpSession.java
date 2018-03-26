@@ -27,39 +27,16 @@ import com.nameof.cache.CacheDao;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class DefaultCacheHttpSession extends HttpSessionWrapper implements
+public class DefaultCacheHttpSession extends AbstractCacheHttpSession implements
 		CustomSessionProcessor {
 
 	private static final long serialVersionUID = 3977740308601865675L;
 
-	/** 默认过期时间为30分钟  */
-	private static final int DEFAULT_EXPIRE = 60 * 30;
-
-	/**
-	 * 一旦调用setMaxInactiveInterval，就会把maxInactiveInterval值存入缓存，
-	 * 以CACHE_EXPIRE_KEY为token的fieldKey进行存储
-	 */
-	private static final String CACHE_EXPIRE_KEY = "@maxInactiveInterval";
-	
-	/**
-	 * 存储session的CreateTime
-	 */
-	private static final String CACHE_CREATE_TIME_KEY = "@sessionCreateTime";
-
-	/** session id */
-	private final String token;
-
-	private int maxInactiveInterval = DEFAULT_EXPIRE;
-
-	/** 是否为永久性session */
-	private boolean isPersistKey = false;
-	
 	@Autowired
 	private CacheDao cacheDao;
 	
 	public DefaultCacheHttpSession(HttpSession session, String token) {
-		super(session);
-		this.token = token;
+		super(session, token);
 	}
 
 	@Override
@@ -68,89 +45,94 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 		
 		setNew(!cacheDao.exists(token));
 		
-		setCreateTime();
+		initCreateTime();
+		
+		initLastAccessedTime();
 
-		// 从缓存中读取maxInactiveInterval信息
-		Integer originalExpire = (Integer) cacheDao.getAttribute(token, CACHE_EXPIRE_KEY);
-		if (originalExpire != null) {
-			if (originalExpire == -1) {
-				isPersistKey = true;
-			}
-			this.maxInactiveInterval = originalExpire;
-		}
+		initMaxInactiveInterval();
 	}
 
-	private void setCreateTime() {
-		if (isNew) {
-			cacheDao.setAttribute(token, CACHE_CREATE_TIME_KEY, getCreationTime());
+	private void initCreateTime() {
+		if (isNew()) {
+			cacheDao.setAttribute(token, CACHE_CREATE_TIME_KEY, super.getCreationTime());
 			return;
 		}
 		setCreationTime((Long) cacheDao.getAttribute(token, CACHE_CREATE_TIME_KEY));
 	}
+	
 
-	@Override
-	public void commit() {
-		setExpireToCache();
+	private void initLastAccessedTime() {
+		Long lat = (Long) cacheDao.getAttribute(token, CACHE_LAST_ACCESSED_TIME_KEY);
+		if (lat == null) {
+			//在首次访问情况下，LastAccessedTime为空，则返回当前会话创建时间，即此时LastAccessedTime=ThisAccessedTime=CreationTime
+			setLastAccessedTime(getCreationTime());
+			return;
+		}
+		setLastAccessedTime(lat);
 	}
 
-	@Override
-	public int getMaxInactiveInterval() {
-		return maxInactiveInterval;
+	private void initMaxInactiveInterval() {
+		// 从缓存中读取maxInactiveInterval信息
+		Integer originalExpire = (Integer) cacheDao.getAttribute(token, CACHE_INTERVAL_KEY);
+		if (originalExpire != null) {
+			setMaxInactiveInterval(originalExpire);
+		}
 	}
 
 	@Override
 	public void setMaxInactiveInterval(int maxInactiveInterval) {
-		this.maxInactiveInterval = maxInactiveInterval;
-		cacheDao.setAttribute(token, CACHE_EXPIRE_KEY, maxInactiveInterval);
+		super.setMaxInactiveInterval(maxInactiveInterval);
+		cacheDao.setAttribute(token, CACHE_INTERVAL_KEY, maxInactiveInterval);
 	}
 
 	@Override
-	public String getId() {
-		return token;
+	public void commit() {
+		storeLastAccessedTime();
+		setExpireToCache();
+	}
+
+	private void storeLastAccessedTime() {
+		cacheDao.setAttribute(token, CACHE_LAST_ACCESSED_TIME_KEY, getAccessedTime());
+	}
+	
+	private void setExpireToCache() {
+		if (isPersist()) {
+			cacheDao.setPersist(token);
+		}
+		else {
+			cacheDao.setExpire(token, getMaxInactiveInterval());
+		}
 	}
 
 	@Override
-	public Enumeration<String> getAttributeNames() {
-		checkValid();
+	protected Enumeration<String> getAttributeNamesInterval() {
 		Collection<String> keys = cacheDao.getAttributeKeys(token);
 		return new Vector<String>(keys).elements();
 	}
 
 	@Override
-	public String[] getValueNames() {
-		checkValid();
+	protected String[] getValueNamesInterval() {
 		Collection<String> keys = cacheDao.getAttributeKeys(token);
 		return keys.toArray(new String[keys.size()]);
 	}
 
 	@Override
-	public void setAttribute(String name, Object value) {
-		checkValid();
+	protected void setAttributeInterval(String name, Object value) {
 		cacheDao.setAttribute(token, name, value);
 	}
 
 	@Override
-	public Object getAttribute(String name) {
-		checkValid();
-		return cacheDao.getAttribute(token, name);
+	protected void removeAttributeInterval(String name) {
+		cacheDao.removeAttribute(token, name);
 	}
 
 	@Override
-	public void invalidate() {
-		checkValid();
-		super.invalidate();//invalidate原始HttpSession
+	protected void invalidateInterval() {
 		cacheDao.del(token);
 	}
-	
-	private void setExpireToCache() {
-		if (maxInactiveInterval == -1) {
-			if (!isPersistKey) {
-				cacheDao.setPersist(token);
-				isPersistKey = true;
-			}
-		}
-		else {
-			cacheDao.setExpire(token, maxInactiveInterval);
-		}
+
+	@Override
+	protected Object getAttributeInterval(String name) {
+		return cacheDao.getAttribute(token, name);
 	}
 }

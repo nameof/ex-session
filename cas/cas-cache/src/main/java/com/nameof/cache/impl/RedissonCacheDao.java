@@ -56,6 +56,11 @@ public class RedissonCacheDao implements CacheDao {
 	public void setAttribute(String key, String fieldName, Object value) {
 		redis.getMap(key, codec).put(fieldName, value);
 	}
+	
+	@Override
+	public void removeAttribute(String key, String fieldName) {
+		redis.getMap(key, codec).remove(fieldName);
+	}
 
 	@Override
 	public void del(String key) {
