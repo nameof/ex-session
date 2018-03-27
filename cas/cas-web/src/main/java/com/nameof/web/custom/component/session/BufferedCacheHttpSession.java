@@ -1,10 +1,10 @@
 package com.nameof.web.custom.component.session;
 
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -29,7 +29,6 @@ import com.nameof.cache.CacheDao;
  * 
  * @author ChengPan
  */
-@Deprecated
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BufferedCacheHttpSession extends AbstractCacheHttpSession
@@ -38,7 +37,7 @@ public class BufferedCacheHttpSession extends AbstractCacheHttpSession
 	private static final long serialVersionUID = -248646772305855733L;
 
     /** 本地属性集合 */
-    private Map<String,Object> attributes = new ConcurrentHashMap<>();
+    private Map<String,Object> attributes = new HashMap<>();
     
     @Autowired
     private CacheDao cacheDao;
