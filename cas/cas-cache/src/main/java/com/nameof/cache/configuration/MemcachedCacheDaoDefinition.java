@@ -7,12 +7,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.impl.MemcachedCacheDao;
-import com.nameof.common.domain.CacheDaoType;
+import com.nameof.common.domain.SessionAccessor;
 import com.whalin.MemCached.MemCachedClient;
 import com.whalin.MemCached.SockIOPool;
 
 @Configuration
-@Profile(CacheDaoType.MEMCACHED)
+@Profile(SessionAccessor.MEMCACHED)
 public class MemcachedCacheDaoDefinition {
 	
 	@Value("${memcached.host}")

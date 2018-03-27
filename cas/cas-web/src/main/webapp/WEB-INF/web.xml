@@ -12,7 +12,7 @@
 	<!-- 选择SESSION缓存的实现 -->
 	<context-param>
 		<param-name>spring.profiles.active</param-name>
-		<param-value>redisson</param-value>
+		<param-value>spring-session</param-value>
 	</context-param>
 	
 	<listener>
@@ -48,6 +48,10 @@
 	<filter>
 		<filter-name>sessionFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>sessionFilter</filter-name>

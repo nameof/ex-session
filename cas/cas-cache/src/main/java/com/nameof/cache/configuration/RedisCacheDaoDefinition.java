@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Profile;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.impl.RedisCacheDao;
-import com.nameof.common.domain.CacheDaoType;
+import com.nameof.common.domain.SessionAccessor;
 
 @Configuration
-@Profile(CacheDaoType.REDIS)
+@Profile(SessionAccessor.REDIS)
 public class RedisCacheDaoDefinition {
 	
 	@Bean

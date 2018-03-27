@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Profile;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.impl.EhCacheDao;
-import com.nameof.common.domain.CacheDaoType;
+import com.nameof.common.domain.SessionAccessor;
 
 @Configuration
-@Profile(CacheDaoType.EHCACHE)
+@Profile(SessionAccessor.EHCACHE)
 public class EhCacheDaoDefinition {
 	
 	private String cacheName = "sessionCache";

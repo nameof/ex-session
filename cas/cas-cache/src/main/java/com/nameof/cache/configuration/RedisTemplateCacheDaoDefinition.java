@@ -13,11 +13,11 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.impl.RedisTemplateCacheDao;
-import com.nameof.common.domain.CacheDaoType;
+import com.nameof.common.domain.SessionAccessor;
 import com.nameof.common.domain.DataFormatEnum;
 
 @Configuration
-@Profile(CacheDaoType.REDIS_TEMPLATE)
+@Profile(SessionAccessor.REDIS_TEMPLATE)
 public class RedisTemplateCacheDaoDefinition {
 	
 	@Value("${redis.host}")

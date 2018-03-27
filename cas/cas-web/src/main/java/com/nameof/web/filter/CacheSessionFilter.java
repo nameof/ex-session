@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.nameof.common.domain.Constants;
+import com.nameof.common.domain.SessionAccessor;
 import com.nameof.common.utils.RedisUtil;
 import com.nameof.web.custom.component.factory.CustomRequestFactory;
 import com.nameof.web.custom.component.request.CustomHttpServletRequest;
@@ -29,6 +31,9 @@ public class CacheSessionFilter implements Filter {
 	
 	@Autowired
 	private CustomRequestFactory requestFactory;
+	
+	/** 是否开启spring-session */
+	private boolean userSpringSession = false;
 
 	@Override
 	public void destroy() {
@@ -38,7 +43,12 @@ public class CacheSessionFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest)request;  
+        if (userSpringSession) {
+        	chain.doFilter(request, response);
+        	RedisUtil.returnResource();//release redis
+        	return;
+        }
+		HttpServletRequest req = (HttpServletRequest)request;  
         HttpServletResponse resp = (HttpServletResponse)response;  
         CustomHttpServletRequest wrapper = requestFactory.getWrapperedRequest(req, resp);
         try {
@@ -52,8 +62,12 @@ public class CacheSessionFilter implements Filter {
 	}
 
 	@Override
-	public void init(FilterConfig arg0) throws ServletException {
-		
+	public void init(FilterConfig config) throws ServletException {
+		String sessionAccessor = (String) config.getServletContext()
+				.getAttribute(Constants.SESSION_ACCESSOR);
+		if (SessionAccessor.SPRING_SESSION.equalsIgnoreCase(sessionAccessor)) {
+			this.userSpringSession = true;
+		}
 	}
 
 }

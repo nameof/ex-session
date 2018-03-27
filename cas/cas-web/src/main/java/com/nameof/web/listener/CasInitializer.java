@@ -11,6 +11,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
 
+import com.nameof.common.domain.Constants;
+
 @Component
 public class CasInitializer implements ServletContextAware, ApplicationContextAware {
 	
@@ -23,8 +25,8 @@ public class CasInitializer implements ServletContextAware, ApplicationContextAw
 	public void setServletContext(ServletContext servletContext) {
 		servletContext.setAttribute("monitorUrl", monitorUrl);
 		
-		String activeProfile = servletContext.getInitParameter("spring.profiles.active");
-		servletContext.setAttribute("sessionAccessor", activeProfile);
+		String activeProfile = servletContext.getInitParameter(Constants.SPRING_PROFILES_ACTIVE);
+		servletContext.setAttribute(Constants.SESSION_ACCESSOR, activeProfile);
 		LOG.debug("sessionAccessor : {}" , activeProfile);
 	}
 
