@@ -10,7 +10,7 @@ import com.nameof.common.domain.SessionAccessor;
 
 @Configuration
 @Profile(SessionAccessor.REDIS)
-public class RedisCacheDaoDefinition {
+public class RedisCacheDaoConfig {
 	
 	@Bean
 	public CacheDao cacheDao() {

@@ -12,7 +12,15 @@ import org.springframework.session.web.context.AbstractHttpSessionApplicationIni
 
 import com.nameof.common.domain.DataFormatEnum;
 import com.nameof.common.domain.SessionAccessor;
-
+/**
+ * 这里默认集成redis，除此之外，spring-session还支持
+ * org.redisson.spring.session.config.EnableRedissonHttpSession
+ * org.springframework.session.data.gemfire.config.annotation.web.http.EnableGemFireHttpSession
+ * org.springframework.session.data.mongo.config.annotation.web.http.EnableMongoHttpSession
+ * org.springframework.session.hazelcast.config.annotation.web.http.EnableHazelcastHttpSession
+ * org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession
+ * @author ChengPan
+ */
 @EnableRedisHttpSession
 @Profile(SessionAccessor.SPRING_SESSION)
 public class SpringSessionConfig extends AbstractHttpSessionApplicationInitializer {

@@ -13,7 +13,7 @@ import com.whalin.MemCached.SockIOPool;
 
 @Configuration
 @Profile(SessionAccessor.MEMCACHED)
-public class MemcachedCacheDaoDefinition {
+public class MemcachedCacheDaoConfig {
 	
 	@Value("${memcached.host}")
 	private String memcachedHost;

@@ -15,7 +15,7 @@ import com.nameof.common.domain.SessionAccessor;
 
 @Configuration
 @Profile(SessionAccessor.EHCACHE)
-public class EhCacheDaoDefinition {
+public class EhCacheDaoConfig {
 	
 	private String cacheName = "sessionCache";
 	

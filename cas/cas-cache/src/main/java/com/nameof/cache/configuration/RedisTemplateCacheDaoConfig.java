@@ -18,7 +18,7 @@ import com.nameof.common.domain.DataFormatEnum;
 
 @Configuration
 @Profile(SessionAccessor.REDIS_TEMPLATE)
-public class RedisTemplateCacheDaoDefinition {
+public class RedisTemplateCacheDaoConfig {
 	
 	@Value("${redis.host}")
 	private String redisHost;
