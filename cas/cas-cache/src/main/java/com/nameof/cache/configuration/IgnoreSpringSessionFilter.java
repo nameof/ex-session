@@ -14,12 +14,14 @@ import org.springframework.stereotype.Component;
 import com.nameof.common.domain.SessionAccessor;
 
 /**
- *   在集成spring-session的情况下，spring-session会在容器中寻找名为springSessionRepositoryFilter的bean，
+ * 在集成spring-session的情况下，spring-session会在容器中寻找名为springSessionRepositoryFilter的bean，
  * 这个bean实现容器HttpSession的替换，它由{@link org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession}
  * 注册。<br/>
- *   如果Profile使用的不是spring-session，即{@link com.nameof.cache.configuration.SpringSessionConfig}
+ * 
+ * 如果Profile使用的不是spring-session，即{@link com.nameof.cache.configuration.SpringSessionConfig}
  * 没有开启{@link org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession} 
- * 则在容器中注册一个这样的bean，它什么也不干，只是避免sping找不到bean而报错。
+ * 则在容器中注册一个这样的bean，它什么也不干，只是避免{@link org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer}
+ * 找不到bean而报错。
  * @author ChengPan
  */
 @Component("springSessionRepositoryFilter")
