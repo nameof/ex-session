@@ -18,6 +18,8 @@
     	<context:include-filter type="annotation"  expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
     
+    <context:property-placeholder location="classpath:cas-config.properties"/>
+    
 	<mvc:annotation-driven>
 		<mvc:message-converters>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">

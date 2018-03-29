@@ -12,7 +12,7 @@
 	<!-- 选择SESSION缓存的实现 -->
 	<context-param>
 		<param-name>spring.profiles.active</param-name>
-		<param-value>spring-session</param-value>
+		<param-value>redis</param-value>
 	</context-param>
 	
 	<listener>

@@ -18,16 +18,25 @@ public class CasInitializer implements ServletContextAware, ApplicationContextAw
 	
 	@Value("${session.monitor.url}")
 	private String monitorUrl;
+	
+	@Value("${login.websocket.enable}")
+	private boolean loginWithWebSocket;
 
 	private static final Logger LOG = LoggerFactory.getLogger(CasInitializer.class);
 
 	@Override
 	public void setServletContext(ServletContext servletContext) {
 		servletContext.setAttribute("monitorUrl", monitorUrl);
+		LOG.debug("monitorUrl : {}" , monitorUrl);
+		
+		servletContext.setAttribute("loginWithWebSocket", loginWithWebSocket);
+		LOG.debug("loginWithWebSocket : {}" , loginWithWebSocket);
 		
 		String activeProfile = servletContext.getInitParameter(Constants.SPRING_PROFILES_ACTIVE);
 		servletContext.setAttribute(Constants.SESSION_ACCESSOR, activeProfile);
 		LOG.debug("sessionAccessor : {}" , activeProfile);
+		
+		
 	}
 
 	@Override

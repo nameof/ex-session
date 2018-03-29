@@ -1,6 +1,7 @@
 package com.nameof.web.filter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -11,11 +12,15 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nameof.common.domain.Constants;
 import com.nameof.common.domain.SessionAccessor;
+import com.nameof.common.utils.CookieUtil;
 import com.nameof.common.utils.RedisUtil;
 import com.nameof.web.custom.component.factory.CustomRequestFactory;
 import com.nameof.web.custom.component.request.CustomHttpServletRequest;
@@ -29,6 +34,8 @@ import com.nameof.web.custom.component.session.CustomSessionProcessor;
 @Component("sessionFilter")
 public class CacheSessionFilter implements Filter {
 	
+	private static final Logger LOG = LoggerFactory.getLogger(CacheSessionFilter.class);
+	
 	@Autowired
 	private CustomRequestFactory requestFactory;
 	
@@ -36,30 +43,47 @@ public class CacheSessionFilter implements Filter {
 	private boolean userSpringSession = false;
 
 	@Override
-	public void destroy() {
-		
-	}
-
-	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-        if (userSpringSession) {
-        	chain.doFilter(request, response);
-        	RedisUtil.returnResource();//release redis
-        	return;
-        }
 		HttpServletRequest req = (HttpServletRequest)request;  
-        HttpServletResponse resp = (HttpServletResponse)response;  
-        CustomHttpServletRequest wrapper = requestFactory.getWrapperedRequest(req, resp);
-        try {
-        	chain.doFilter(wrapper, response);
-        } finally {
-	        if (wrapper.getSession(false) instanceof CustomSessionProcessor) {
-	        	((CustomSessionProcessor) wrapper.getSession()).commit();
-	        }
-	        RedisUtil.returnResource();//release redis
+	    HttpServletResponse resp = (HttpServletResponse)response; 
+	    CustomHttpServletRequest wrapper = null;
+		try {
+			if (userSpringSession) {
+				chain.doFilter(request, response);
+			} else { 
+			    wrapper = requestFactory.getWrapperedRequest(req, resp);
+			    chain.doFilter(wrapper, response);
+			}
+		} finally {
+			if (!userSpringSession) {
+				commitSessionToCache(wrapper);
+				checkTokenCookie(wrapper, resp);
+			}
+			RedisUtil.returnResource();//release redis
+		}
+	}
+	
+	private void commitSessionToCache(CustomHttpServletRequest wrapper) {
+		try {
+			if (wrapper != null && wrapper.getSession(false) instanceof CustomSessionProcessor) {
+				((CustomSessionProcessor) wrapper.getSession()).commit();
+			}
+		} catch (Throwable e) {
+			LOG.error("commitSessionToCache fail {}", e);
+		}
+	}
+
+	private void checkTokenCookie(HttpServletRequest req, HttpServletResponse resp) {
+		String token = CookieUtil.getCookieValue(req, CustomHttpServletRequest.COOKIE_SESSION_KEY);
+        if (StringUtils.isBlank(token) && req.getSession(false) == null) {
+        	token = UUID.randomUUID().toString();
+        	CookieUtil.addCookie(resp, CustomHttpServletRequest.COOKIE_SESSION_KEY, token);
         }
 	}
+	
+	@Override
+	public void destroy() { }
 
 	@Override
 	public void init(FilterConfig config) throws ServletException {
