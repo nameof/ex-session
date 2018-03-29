@@ -32,7 +32,6 @@ import com.nameof.common.utils.UrlBuilder;
 import com.nameof.mq.message.LogoutMessage;
 import com.nameof.mq.sender.Sender;
 import com.nameof.service.UserService;
-import com.nameof.web.custom.component.request.CustomHttpServletRequest;
 import com.nameof.web.websocket.WsLoginHandler;
 
 @Controller
@@ -214,9 +213,7 @@ public class SystemController {
 			logoutMessageSender.sendMessage(new LogoutMessage(session.getId(), logoutUrls));
 		}
 		
-		Cookie c = new Cookie(Constants.GLOBAL_SESSION_ID, "");
-		c.setMaxAge(0);
-		response.addCookie(c);
+		CookieUtil.addCookie(response, Constants.GLOBAL_SESSION_ID, "", 0);
 		
 		session.invalidate();
 		return "redirect:/login";
@@ -225,6 +222,7 @@ public class SystemController {
 	
 	/**
 	 * 为客户端站点验证token
+	 * TODO 安全问题
 	 * @param session
 	 * @return JSON格式的用户信息
 	 */
