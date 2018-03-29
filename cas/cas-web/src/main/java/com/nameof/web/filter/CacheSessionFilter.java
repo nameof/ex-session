@@ -75,10 +75,10 @@ public class CacheSessionFilter implements Filter {
 	}
 
 	private void checkTokenCookie(HttpServletRequest req, HttpServletResponse resp) {
-		String token = CookieUtil.getCookieValue(req, CustomHttpServletRequest.COOKIE_SESSION_KEY);
+		String token = CookieUtil.getCookieValue(req, Constants.GLOBAL_SESSION_ID);
         if (StringUtils.isBlank(token) && req.getSession(false) == null) {
         	token = UUID.randomUUID().toString();
-        	CookieUtil.addCookie(resp, CustomHttpServletRequest.COOKIE_SESSION_KEY, token);
+        	CookieUtil.addCookie(resp, Constants.GLOBAL_SESSION_ID, token);
         }
 	}
 	

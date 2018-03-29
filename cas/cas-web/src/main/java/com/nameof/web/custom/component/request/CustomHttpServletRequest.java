@@ -13,6 +13,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.nameof.common.domain.Constants;
 import com.nameof.common.utils.CookieUtil;
 import com.nameof.web.custom.component.factory.CacheHttpSessionFactory;
 import com.nameof.web.custom.component.session.HttpSessionWrapper;
@@ -30,8 +31,6 @@ public class CustomHttpServletRequest extends HttpServletRequestWrapper {
     
     private HttpServletResponse response;
     
-    public static final String COOKIE_SESSION_KEY = "token";
-    
     @Autowired
     private CacheHttpSessionFactory sessionFactory;
     
@@ -48,10 +47,10 @@ public class CustomHttpServletRequest extends HttpServletRequestWrapper {
         if (!create) {
         	return null;
         }
-        String token = CookieUtil.getCookieValue(this, COOKIE_SESSION_KEY);
+        String token = CookieUtil.getCookieValue(this, Constants.GLOBAL_SESSION_ID);
         if (StringUtils.isBlank(token)) {
         	token = UUID.randomUUID().toString();
-        	CookieUtil.addCookie(response, COOKIE_SESSION_KEY, token);
+        	CookieUtil.addCookie(response, Constants.GLOBAL_SESSION_ID, token);
         }
         HttpSessionWrapper session = sessionFactory.newSessionInstance(super.getSession(), token);
         

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.TextMessage;
 
 import com.alibaba.fastjson.JSONObject;
+import com.nameof.common.domain.Constants;
 import com.nameof.common.domain.User;
 import com.nameof.common.utils.CookieUtil;
 import com.nameof.common.utils.UrlBuilder;
@@ -41,7 +42,7 @@ public class SystemController {
 	private static final int REMEMBER_LOGIN_STATE_TIME = 15 * 24 * 60 * 60;
 	
 	/** 票据传递参数名 */
-	private static final String TICKET_KEY = "token";
+	private static final String TICKET_KEY = Constants.GLOBAL_SESSION_ID;
 	
 	/** 返回地址参数名 */
 	private static final String RETURN_URL_KEY = "returnUrl";
@@ -133,7 +134,7 @@ public class SystemController {
 			if (rememberMe == Boolean.TRUE) {
 				//"记住我"
 				session.setMaxInactiveInterval(REMEMBER_LOGIN_STATE_TIME);
-				Cookie sessionCookie = CookieUtil.getCookie(request, CustomHttpServletRequest.COOKIE_SESSION_KEY);
+				Cookie sessionCookie = CookieUtil.getCookie(request, Constants.GLOBAL_SESSION_ID);
 				if (sessionCookie != null) {
 					sessionCookie.setMaxAge(REMEMBER_LOGIN_STATE_TIME);
 					response.addCookie(sessionCookie);
@@ -213,7 +214,7 @@ public class SystemController {
 			logoutMessageSender.sendMessage(new LogoutMessage(session.getId(), logoutUrls));
 		}
 		
-		Cookie c = new Cookie(CustomHttpServletRequest.COOKIE_SESSION_KEY, "");
+		Cookie c = new Cookie(Constants.GLOBAL_SESSION_ID, "");
 		c.setMaxAge(0);
 		response.addCookie(c);
 		

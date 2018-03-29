@@ -6,4 +6,6 @@ public interface Constants {
 	
 	/** spring profile */
 	String SPRING_PROFILES_ACTIVE = "spring.profiles.active";
+	
+	String GLOBAL_SESSION_ID = "token";
 }
