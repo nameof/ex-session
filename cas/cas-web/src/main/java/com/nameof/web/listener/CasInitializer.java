@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
 
 import com.nameof.common.domain.Constants;
+import com.nameof.common.domain.SessionAccessor;
 
 @Component
 public class CasInitializer implements ServletContextAware, ApplicationContextAware {
@@ -33,6 +34,9 @@ public class CasInitializer implements ServletContextAware, ApplicationContextAw
 		LOG.debug("loginWithWebSocket : {}" , loginWithWebSocket);
 		
 		String activeProfile = servletContext.getInitParameter(Constants.SPRING_PROFILES_ACTIVE);
+		if (!SessionAccessor.ALL.contains(activeProfile)) {
+			throw new IllegalStateException("不合法的profile配置，不存在对应的SessionAccessor: " + activeProfile);
+		}
 		servletContext.setAttribute(Constants.SESSION_ACCESSOR, activeProfile);
 		LOG.debug("sessionAccessor : {}" , activeProfile);
 		

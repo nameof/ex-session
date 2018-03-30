@@ -9,7 +9,10 @@ import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer;
+import org.springframework.session.web.http.CookieSerializer;
+import org.springframework.session.web.http.DefaultCookieSerializer;
 
+import com.nameof.common.domain.Constants;
 import com.nameof.common.domain.DataFormatEnum;
 import com.nameof.common.domain.SessionAccessor;
 /**
@@ -50,5 +53,13 @@ public class SpringSessionConfig extends AbstractHttpSessionApplicationInitializ
 			default:
 				return new JdkSerializationRedisSerializer();
 		}
+    }
+	
+	@Bean
+    public CookieSerializer cookieSerializer() {
+            DefaultCookieSerializer serializer = new DefaultCookieSerializer();
+            //修改spring-session的cookieName为本cas系统全局统一的sessionid，以支持扫码登录、单点登录
+            serializer.setCookieName(Constants.GLOBAL_SESSION_ID); 
+            return serializer;
     }
 }

@@ -1,5 +1,8 @@
 package com.nameof.common.domain;
 
+import java.util.Arrays;
+import java.util.List;
+
 public interface SessionAccessor {
 
 	String REDIS = "redis";
@@ -14,4 +17,6 @@ public interface SessionAccessor {
 	
 	String SPRING_SESSION = "spring-session";
 	
+	List<String> ALL = Arrays.asList(new String[] {REDIS, REDISSON, REDIS_TEMPLATE
+			, MEMCACHED, EHCACHE, SPRING_SESSION});
 }
