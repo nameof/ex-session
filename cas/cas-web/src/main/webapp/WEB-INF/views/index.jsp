@@ -3,44 +3,59 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>欢迎</title>
+	<title>欢迎</title>
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
-	welcome ! ${user.name}
-	<br>
-	<br> 当前通道：${applicationScope.sessionAccessor}
-	<br>
-	<br>
-	<a href="${applicationScope.monitorUrl}">Session监控</a>
-	<br>
-	<br>
-	<a href="${pageContext.request.contextPath}/logout">注销登录</a>
-	<br>
-	<br>
-	<h1>Try it</h1>
+	<nav class="navbar">
+		<ul class="nav navbar-nav navbar-right" style="margin-right:25px;">
+			<li><a href="#"><span class="glyphicon"/>欢迎，${user.name}</span></a></li>
+			<li><a href="${pageContext.request.contextPath}/logout"><span class="glyphicon glyphicon-off"/>&nbsp;注销登录</a></li>
+		</ul>
+	</nav>
+	
+	<div class="container">
+		<h3>
+			<span class="">当前通道：</span>
+			<span class="label label label-info">${applicationScope.sessionAccessor}</span>
+		</h3>
+		
+		<br/>
+		<a href="${applicationScope.monitorUrl}" class="btn btn-success">Session监控</a>
+		
+		<hr>
+		<h1>Try it</h1>
 
-    <form class="form-inline" action="${pageContext.request.contextPath}/public/setAttribute" method="post">
-        <label for="attributeName">Attribute Name</label>
-        <input id="attributeName" type="text" name="attributeName"/>
-        <label for="attributeValue">Attribute Value</label>
-        <input id="attributeValue" type="text" name="attributeValue"/>
-        <input type="submit" value="Set Attribute"/>
-    </form>
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>Attribute Name</th>
-				<th>Attribute Value</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${sessionScope}" var="attr">
+	    <form class="form-inline" action="${pageContext.request.contextPath}/public/setAttribute" method="post">
+	        <label for="attributeName">Attribute Name </label>
+	        <input id="attributeName" type="text" name="attributeName" class="form-control" required/>
+	        
+	        <label for="attributeValue">Attribute Value </label>
+	        <input id="attributeValue" type="text" name="attributeValue" class="form-control" required/>
+	        
+	        <input type="submit" value="Set Attribute" class="btn btn-primary"/>
+	    </form>
+	    
+	    <hr>
+		<table class="table table-striped">
+			<thead>
 				<tr>
-					<td><c:out value="${attr.key}" /></td>
-					<td><c:out value="${attr.value}" /></td>
+					<th>Attribute Name</th>
+					<th>Attribute Value</th>
 				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				<c:forEach items="${sessionScope}" var="attr">
+					<tr>
+						<td><c:out value="${attr.key}" /></td>
+						<td><c:out value="${attr.value}" /></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>
+
+<script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js" />
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" />
