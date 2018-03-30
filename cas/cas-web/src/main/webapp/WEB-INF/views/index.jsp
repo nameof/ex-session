@@ -19,7 +19,7 @@
 	<br>
 	<h1>Try it</h1>
 
-    <form class="form-inline" role="form" action="" method="post">
+    <form class="form-inline" action="${pageContext.request.contextPath}/public/setAttribute" method="post">
         <label for="attributeName">Attribute Name</label>
         <input id="attributeName" type="text" name="attributeName"/>
         <label for="attributeValue">Attribute Value</label>

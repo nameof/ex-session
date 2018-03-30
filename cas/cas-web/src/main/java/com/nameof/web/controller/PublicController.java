@@ -16,6 +16,13 @@ import com.nameof.common.utils.QRCodeUtils;
 @Controller
 @RequestMapping("/public")
 public class PublicController {
+	
+	@RequestMapping("setAttribute")
+	public String setAttribute(String attributeName, String attributeValue,
+			HttpSession session) throws WriterException, IOException {
+		session.setAttribute(attributeName, attributeValue);
+		return "redirect:/";
+	}
 
 	/**
 	 * 生成带有会话id的二维码供客户端登录
