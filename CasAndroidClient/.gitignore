@@ -1,0 +1,10 @@
+/local.properties
+.DS_Store
+/build
+/captures
+*.iml
+*.ipr
+*.iws
+.idea
+out
+test-output
