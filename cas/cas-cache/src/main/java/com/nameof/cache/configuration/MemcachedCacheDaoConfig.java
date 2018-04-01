@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.impl.MemcachedCacheDao;
-import com.nameof.common.domain.SessionAccessor;
+import com.nameof.common.constant.SessionAccessor;
 import com.whalin.MemCached.MemCachedClient;
 import com.whalin.MemCached.SockIOPool;
 

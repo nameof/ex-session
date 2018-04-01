@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import com.nameof.common.domain.SessionAccessor;
+import com.nameof.common.constant.SessionAccessor;
 
 /**
  * 在使用spring session的情况下，什么也不做，由spring session去包装servlet对象

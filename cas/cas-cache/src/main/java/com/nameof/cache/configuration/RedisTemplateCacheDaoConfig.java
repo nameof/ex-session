@@ -13,8 +13,8 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.impl.RedisTemplateCacheDao;
-import com.nameof.common.domain.SessionAccessor;
-import com.nameof.common.domain.DataFormatEnum;
+import com.nameof.common.constant.SessionAccessor;
+import com.nameof.common.enums.DataFormatEnum;
 
 @Configuration
 @Profile(SessionAccessor.REDIS_TEMPLATE)

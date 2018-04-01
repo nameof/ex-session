@@ -1,4 +1,4 @@
-package com.nameof.common.domain;
+package com.nameof.common.enums;
 
 public enum DataFormatEnum {
 	BINARY,

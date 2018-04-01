@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Profile;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.impl.RedissonCacheDao;
-import com.nameof.common.domain.SessionAccessor;
-import com.nameof.common.domain.DataFormatEnum;
+import com.nameof.common.constant.SessionAccessor;
+import com.nameof.common.enums.DataFormatEnum;
 
 @Configuration
 @Profile(SessionAccessor.REDISSON)

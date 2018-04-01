@@ -16,23 +16,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.socket.TextMessage;
 
-import com.alibaba.fastjson.JSONObject;
-import com.nameof.common.domain.Constants;
+import com.nameof.common.constant.Constants;
 import com.nameof.common.domain.User;
 import com.nameof.common.utils.CookieUtil;
 import com.nameof.common.utils.UrlBuilder;
 import com.nameof.mq.message.LogoutMessage;
 import com.nameof.mq.sender.Sender;
 import com.nameof.service.UserService;
-import com.nameof.web.websocket.WsLoginHandler;
 
 @Controller
 public class SystemController {
@@ -58,13 +54,8 @@ public class SystemController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private WsLoginHandler wsLoginHandler;
-	
-	@Value("${login.websocket.enable}")
-	private boolean loginWithWebSocket;
 
+	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(String returnUrl,
 						String logoutUrl,
@@ -245,42 +236,6 @@ public class SystemController {
 		}
 		else {
 			return Boolean.TRUE;
-		}
-	}
-	
-	/**
-	 * 处理手机客户端扫码登录
-	 * @param username
-	 * @param passwd
-	 * @param session
-	 * @return 登录结果提示消息
-	 */
-	@RequestMapping(value = "/processQRCodeLogin", method = RequestMethod.POST)
-	@ResponseBody
-	public String processQRCodeLogin(User inputUser, HttpSession session) {
-		String msg = "";
-		User user = userService.verifyUserLogin(inputUser);
-		if (user == null) {
-			msg = "用户名或密码错误!";
-		}
-		else {
-			session.setAttribute("user", user);
-			sendWebSocketMsgIfnecessary(session);
-			msg = "登录成功!";
-		}
-		return msg;
-	}
-
-	/**
-	 * 向浏览器推送发送当前session已登录
-	 * @param session
-	 */
-	private void sendWebSocketMsgIfnecessary(HttpSession session) {
-		if (loginWithWebSocket) {
-			JSONObject json = new JSONObject();
-			json.put("login", true);
-			TextMessage text = new TextMessage(json.toString());
-			wsLoginHandler.sendMessageToUser(session.getId(), text);
 		}
 	}
 	

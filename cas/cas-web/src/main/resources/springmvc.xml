@@ -41,7 +41,17 @@
     	<property name="suffix" value=".jsp"></property>
     </bean>   
     
+    <bean id="appIdInterceptor" class="com.nameof.web.interceptor.AppIdInterceptor">
+    	<constructor-arg>
+    		<list>
+    			<!-- 合法的AppId -->
+    			<value>eyJzdWIiOiJKb2UiLCJleHAiOjE1MjI0NzcyODQsIjQiOiI0In0</value>
+    		</list>
+    	</constructor-arg>
+    </bean>
+    
     <mvc:interceptors>
+    	<!-- web -->
 	    <mvc:interceptor>
 	        <mvc:mapping path="/**" />
 	        <mvc:exclude-mapping path="/login"/>
@@ -50,7 +60,18 @@
 	        <mvc:exclude-mapping path="/verifyQRCodeLogin"/>
 	        <mvc:exclude-mapping path="/validatetoken"/>
 	        <mvc:exclude-mapping path="/public/**"/>
-	        <bean class="com.nameof.web.filter.LoginInterceptor"/>
+	        <mvc:exclude-mapping path="/app/**"/>
+	        <bean class="com.nameof.web.interceptor.LoginInterceptor"/>
+	    </mvc:interceptor>
+	    <!-- app -->
+	    <mvc:interceptor>
+	    	<mvc:mapping path="/app/**"/>
+	    	<ref bean="appIdInterceptor"/>
+	    </mvc:interceptor>
+	     <mvc:interceptor>
+	    	<mvc:mapping path="/app/**"/>
+	    	<mvc:exclude-mapping path="/app/login"/>
+	    	<bean class="com.nameof.web.interceptor.AppJwtInterceptor"/>
 	    </mvc:interceptor>
 	</mvc:interceptors>
 

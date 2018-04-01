@@ -13,7 +13,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.nameof.common.domain.Constants;
+import com.nameof.common.constant.Constants;
 import com.nameof.common.utils.CookieUtil;
 import com.nameof.web.custom.component.factory.CacheHttpSessionFactory;
 import com.nameof.web.custom.component.session.HttpSessionWrapper;

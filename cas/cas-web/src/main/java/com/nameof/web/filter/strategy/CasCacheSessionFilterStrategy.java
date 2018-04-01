@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import com.nameof.common.domain.Constants;
-import com.nameof.common.domain.SessionAccessor;
+import com.nameof.common.constant.Constants;
+import com.nameof.common.constant.SessionAccessor;
 import com.nameof.common.utils.CookieUtil;
 import com.nameof.web.custom.component.factory.CustomRequestFactory;
 import com.nameof.web.custom.component.request.CustomHttpServletRequest;

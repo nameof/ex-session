@@ -1,4 +1,4 @@
-package com.nameof.web.filter;
+package com.nameof.web.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
  * 登录拦截器
  * @author ChengPan
  */
-public class LoginInterceptor implements HandlerInterceptor{  
+public class LoginInterceptor implements HandlerInterceptor {  
 
     public void afterCompletion(HttpServletRequest request,  
             HttpServletResponse response, Object handler, Exception exc)  

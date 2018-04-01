@@ -1,4 +1,4 @@
-package com.nameof.common.domain;
+package com.nameof.common.constant;
 
 import java.util.Arrays;
 import java.util.List;

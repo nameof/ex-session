@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.cache.impl.EhCacheDao;
-import com.nameof.common.domain.SessionAccessor;
+import com.nameof.common.constant.SessionAccessor;
 
 @Configuration
 @Profile(SessionAccessor.EHCACHE)

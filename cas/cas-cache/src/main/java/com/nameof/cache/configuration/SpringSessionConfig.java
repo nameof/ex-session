@@ -12,9 +12,9 @@ import org.springframework.session.web.context.AbstractHttpSessionApplicationIni
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 
-import com.nameof.common.domain.Constants;
-import com.nameof.common.domain.DataFormatEnum;
-import com.nameof.common.domain.SessionAccessor;
+import com.nameof.common.constant.Constants;
+import com.nameof.common.constant.SessionAccessor;
+import com.nameof.common.enums.DataFormatEnum;
 /**
  * 这里默认集成redis，除此之外，spring-session还支持
  * org.redisson.spring.session.config.EnableRedissonHttpSession

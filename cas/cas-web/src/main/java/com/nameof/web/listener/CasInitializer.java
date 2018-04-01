@@ -11,8 +11,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
 
-import com.nameof.common.domain.Constants;
-import com.nameof.common.domain.SessionAccessor;
+import com.nameof.common.constant.Constants;
+import com.nameof.common.constant.SessionAccessor;
 
 @Component
 public class CasInitializer implements ServletContextAware, ApplicationContextAware {

@@ -1,4 +1,4 @@
-package com.nameof.common.domain;
+package com.nameof.common.constant;
 
 public interface Constants {
 	/** session存储通道的key值 */
@@ -8,4 +8,8 @@ public interface Constants {
 	String SPRING_PROFILES_ACTIVE = "spring.profiles.active";
 	
 	String GLOBAL_SESSION_ID = "token";
+	
+	String WEB_HEADER_APPID = "AppId";
+	
+	String WEB_HEADER_JWT = "JWT";
 }

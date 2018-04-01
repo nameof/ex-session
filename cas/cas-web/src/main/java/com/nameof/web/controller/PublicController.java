@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.zxing.WriterException;
@@ -17,7 +18,7 @@ import com.nameof.common.utils.QRCodeUtils;
 @RequestMapping("/public")
 public class PublicController {
 	
-	@RequestMapping("setAttribute")
+	@RequestMapping(value = "setAttribute", method = RequestMethod.POST)
 	public String setAttribute(String attributeName, String attributeValue,
 			HttpSession session) throws WriterException, IOException {
 		session.setAttribute(attributeName, attributeValue);

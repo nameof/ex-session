@@ -11,7 +11,7 @@ import javax.servlet.ServletResponse;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import com.nameof.common.domain.SessionAccessor;
+import com.nameof.common.constant.SessionAccessor;
 
 /**
  * 在集成spring-session的情况下，spring-session会在容器中寻找名为springSessionRepositoryFilter的bean，
