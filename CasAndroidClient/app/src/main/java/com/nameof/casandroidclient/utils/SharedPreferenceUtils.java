@@ -1,4 +1,4 @@
-package com.casandroidclient.utils;
+package com.nameof.casandroidclient.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

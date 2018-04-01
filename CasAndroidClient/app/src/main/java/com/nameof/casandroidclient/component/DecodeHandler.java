@@ -1,4 +1,4 @@
-package com.casandroidclient.component;
+package com.nameof.casandroidclient.component;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -7,15 +7,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import com.casandroidclient.CaptureActivity;
-import com.casandroidclient.R;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.PlanarYUVLuminanceSource;
-import com.google.zxing.ReaderException;
-import com.google.zxing.Result;
+import com.google.zxing.*;
 import com.google.zxing.common.HybridBinarizer;
+import com.nameof.casandroidclient.CaptureActivity;
+import com.nameof.casandroidclient.R;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Map;

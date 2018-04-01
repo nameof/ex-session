@@ -1,4 +1,4 @@
-package com.casandroidclient.component;
+package com.nameof.casandroidclient.component;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -8,6 +8,7 @@ import android.hardware.Camera.Size;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
+
 import java.io.IOException;
 
 

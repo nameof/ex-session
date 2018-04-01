@@ -1,4 +1,4 @@
-package com.casandroidclient.component;
+package com.nameof.casandroidclient.component;
 
 import com.google.zxing.BarcodeFormat;
 

@@ -1,4 +1,4 @@
-package com.casandroidclient.component;
+package com.nameof.casandroidclient.component;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import com.casandroidclient.R;
+import com.nameof.casandroidclient.R;
 
 
 public class LoadingDialog extends ProgressDialog {

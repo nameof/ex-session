@@ -1,4 +1,4 @@
-package com.casandroidclient.component;
+package com.nameof.casandroidclient.component;
 
 import android.app.ProgressDialog;
 import android.content.Context;

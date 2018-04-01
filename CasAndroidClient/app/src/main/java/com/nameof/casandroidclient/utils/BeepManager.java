@@ -1,4 +1,4 @@
-package com.casandroidclient.utils;
+package com.nameof.casandroidclient.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import com.casandroidclient.R;
+import com.nameof.casandroidclient.R;
 
 import java.io.Closeable;
 import java.io.IOException;

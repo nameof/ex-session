@@ -1,4 +1,4 @@
-package com.casandroidclient;
+package com.nameof.casandroidclient;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

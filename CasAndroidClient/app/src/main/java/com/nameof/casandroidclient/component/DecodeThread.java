@@ -1,17 +1,12 @@
-package com.casandroidclient.component;
+package com.nameof.casandroidclient.component;
 
 import android.os.Handler;
 import android.os.Looper;
-
-import com.casandroidclient.CaptureActivity;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
+import com.nameof.casandroidclient.CaptureActivity;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 

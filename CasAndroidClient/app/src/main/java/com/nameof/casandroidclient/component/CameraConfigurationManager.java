@@ -1,4 +1,4 @@
-package com.casandroidclient.component;
+package com.nameof.casandroidclient.component;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,11 +8,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * 

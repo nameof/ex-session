@@ -1,4 +1,4 @@
-package com.casandroidclient.utils;
+package com.nameof.casandroidclient.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

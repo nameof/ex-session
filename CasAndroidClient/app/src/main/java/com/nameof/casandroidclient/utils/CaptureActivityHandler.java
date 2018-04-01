@@ -1,15 +1,15 @@
-package com.casandroidclient.utils;
+package com.nameof.casandroidclient.utils;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import com.casandroidclient.CaptureActivity;
-import com.casandroidclient.R;
-import com.casandroidclient.component.CameraManager;
-import com.casandroidclient.component.DecodeThread;
 import com.google.zxing.Result;
+import com.nameof.casandroidclient.CaptureActivity;
+import com.nameof.casandroidclient.R;
+import com.nameof.casandroidclient.component.CameraManager;
+import com.nameof.casandroidclient.component.DecodeThread;
 
 public class CaptureActivityHandler extends Handler {
 

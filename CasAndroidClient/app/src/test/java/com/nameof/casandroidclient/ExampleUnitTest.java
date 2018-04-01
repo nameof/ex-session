@@ -1,4 +1,4 @@
-package com.casandroidclient;
+package com.nameof.casandroidclient;
 
 import org.junit.Test;
 

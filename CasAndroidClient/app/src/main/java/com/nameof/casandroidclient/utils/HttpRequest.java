@@ -1,21 +1,23 @@
-package com.casandroidclient.utils;
+package com.nameof.casandroidclient.utils;
+
+import com.nameof.casandroidclient.response.HandleResult;
 
 import java.io.*;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
-
-import android.R.integer;
-import android.R.string;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.widget.ImageView;
 
 public class HttpRequest {
 
-    public static String SERVER = "http://192.168.7.157:8080/cas/processQRCodeLogin";
+    public static String SERVER = "http://192.168.43.160:8080/cas-web";
+
+    public static String APPID = "AiOjE1MjI0NzcyODQeyJzdWIiOiJKb2UiLCJleHsIjQiOiI0In0";
+
+    public static String JWT = "";
+
+    public static HandleResult postHandleResult(String url, String params, Map<String, String> cookies) throws IOException {
+        return JsonUtils.toBean(httpPost(url, params, cookies), HandleResult.class);
+    }
 
     public static String httpPost(String url, String params, Map<String, String> cookies) throws IOException {
         URL realurl = null;
@@ -32,6 +34,8 @@ public class HttpRequest {
             }
         }
         conn.setRequestProperty("Cookie", cookieStr);
+        conn.setRequestProperty("JWT", JWT);
+        conn.setRequestProperty("AppId", APPID);
         PrintWriter pw = new PrintWriter(conn.getOutputStream());
         pw.print(params);
         pw.flush();

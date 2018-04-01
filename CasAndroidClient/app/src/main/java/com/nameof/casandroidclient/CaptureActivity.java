@@ -1,4 +1,4 @@
-package com.casandroidclient;
+package com.nameof.casandroidclient;
 /**
  * Created by Koma on 2017/6/25.
  */
@@ -19,13 +19,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.net.Uri;
+import android.nfc.FormatException;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -34,21 +34,20 @@ import android.util.TypedValue;
 import android.view.*;
 import android.view.animation.LinearInterpolator;
 import android.widget.*;
-import com.casandroidclient.component.CameraManager;
-import com.casandroidclient.component.DecodeThread;
-import com.casandroidclient.utils.BeepManager;
-import com.casandroidclient.utils.CaptureActivityHandler;
-import com.casandroidclient.utils.InactivityTimer;
 import com.google.zxing.*;
 import com.google.zxing.common.HybridBinarizer;
+import com.nameof.casandroidclient.component.CameraManager;
+import com.nameof.casandroidclient.component.DecodeThread;
+import com.nameof.casandroidclient.utils.BeepManager;
+import com.nameof.casandroidclient.utils.CaptureActivityHandler;
+import com.nameof.casandroidclient.utils.InactivityTimer;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.Hashtable;
-
-import static android.R.attr.data;
 
 /**
  * Create by ChengPan
@@ -537,14 +536,10 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         scanBitmap.getPixels(intArray, 0, scanBitmap.getWidth(), 0, 0, scanBitmap.getWidth(), scanBitmap.getHeight());
         RGBLuminanceSource source = new RGBLuminanceSource(scanBitmap.getWidth(), scanBitmap.getHeight(), intArray);
         BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
-        Reader reader = new MultiFormatReader();
+        MultiFormatReader reader = new MultiFormatReader();
         try {
             return reader.decode(bitmap1, hints);
         } catch (NotFoundException e) {
-            e.printStackTrace();
-        } catch (ChecksumException e) {
-            e.printStackTrace();
-        } catch (FormatException e) {
             e.printStackTrace();
         }
         return null;
