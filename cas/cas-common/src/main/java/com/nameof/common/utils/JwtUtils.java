@@ -12,6 +12,7 @@ public class JwtUtils {
 	
 	private static final byte[] SIGN_KEY = "E1MTMzMTE1NjMsInN1YiI6IjEyMyIsImNyZWF0ZWQiOjE1MTI3MDY3NjM3NjB9".getBytes();
 	
+	/** 默认授权24小时 */
 	private static final int EXPIRE = 24 * 60 * 60 * 1000;
 	
 	public static String generate(String subject) {

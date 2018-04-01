@@ -31,7 +31,6 @@
                 </property>
             </bean>
         </mvc:message-converters>
-        
 	</mvc:annotation-driven>
 	
 	<mvc:default-servlet-handler/>
@@ -45,7 +44,7 @@
     	<constructor-arg>
     		<list>
     			<!-- 合法的AppId -->
-    			<value>eyJzdWIiOiJKb2UiLCJleHAiOjE1MjI0NzcyODQsIjQiOiI0In0</value>
+    			<value>AiOjE1MjI0NzcyODQeyJzdWIiOiJKb2UiLCJleHsIjQiOiI0In0</value>
     		</list>
     	</constructor-arg>
     </bean>
