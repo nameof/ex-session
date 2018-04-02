@@ -12,4 +12,12 @@ public interface Constants {
 	String WEB_HEADER_APPID = "AppId";
 	
 	String WEB_HEADER_JWT = "JWT";
+	
+	String WEB_LOGIN_ACCESS_KEY = "loginId";
+	
+	/** 返回地址参数名 */
+	String WEB_RETURN_URL_KEY = "returnUrl";
+	
+	/** 注销地址参数名 */
+	String WEB_LOGOUT_URL_KEY = "logoutUrl";
 }

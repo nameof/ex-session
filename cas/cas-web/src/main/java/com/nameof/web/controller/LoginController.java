@@ -6,6 +6,7 @@ import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,13 +24,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.nameof.common.constant.Constants;
 import com.nameof.common.domain.User;
 import com.nameof.common.utils.CookieUtil;
+import com.nameof.common.utils.SpringUtils;
 import com.nameof.common.utils.UrlBuilder;
 import com.nameof.mq.message.LogoutMessage;
 import com.nameof.mq.sender.Sender;
 import com.nameof.service.UserService;
 
 @Controller
-public class SystemController {
+public class LoginController extends BaseController {
 
 	/** "记住我"过期策略为15天，作用于Cookie的maxAge，Session的MaxInactiveInterval */
 	private static final int REMEMBER_LOGIN_STATE_TIME = 15 * 24 * 60 * 60;
@@ -39,29 +39,20 @@ public class SystemController {
 	/** 票据传递参数名 */
 	private static final String TICKET_KEY = Constants.GLOBAL_SESSION_ID;
 	
-	/** 返回地址参数名 */
-	private static final String RETURN_URL_KEY = "returnUrl";
-	
-	/** 注销地址参数名 */
-	private static final String LOGOUT_URL_KEY = "logoutUrl";
-	
 	private static final Charset URL_ENCODING_CHARSET = Charset.forName("UTF-8");
-	
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
 	private Sender logoutMessageSender;
 	
 	@Autowired
 	private UserService userService;
-
 	
+
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(String returnUrl,
 						String logoutUrl,
 					    HttpSession session,
-					    HttpServletResponse response,
-					    HttpServletRequest request,
+					    HttpServletResponse resp,
 					    Model model) throws IOException {
 		User user = (User) session.getAttribute("user");
 		if (user != null) {
@@ -73,82 +64,80 @@ public class SystemController {
 				storeLogoutUrl(session, logoutUrl);
 
 				//直接携带token返回客户端站点
-				backToClient(returnUrl, session, response);
+				backToClient(returnUrl, session, resp);
 				return null;
 			}
 			else {
 				return "redirect:index";//不允许重复登录
 			}
 		}
-		else {
-			//返回地址、注销地址存入表单隐藏域
-			model.addAttribute(RETURN_URL_KEY, returnUrl);
-			model.addAttribute(LOGOUT_URL_KEY, logoutUrl);
-		}
-		return "login";
+		
+		return rendToLoginView(returnUrl, logoutUrl, session);
 	}
 
-	/**
-	 * 处理网页登录
-	 * @param username
-	 * @param passwd
-	 * @param rememberMe
-	 * @param returnUrl
-	 * @param session
-	 * @param response
-	 * @param request
-	 * @param model
-	 * @return
-	 * @throws IOException
-	 */
+	/** 处理网页登录 */
 	@RequestMapping(value = "/processLogin", method = RequestMethod.POST)
 	public String processLogin(User inputUser,
 							   Boolean rememberMe,
 							   String returnUrl,
 							   String logoutUrl,
+							   String loginId,
 							   HttpSession session,
-							   HttpServletResponse response,
-							   HttpServletRequest request,
+							   HttpServletResponse resp,
+							   HttpServletRequest req,
 							   Model model) throws IOException {
+		if (StringUtils.isEmpty(loginId)) {
+			return "redirect:/login";
+		}
+		
+		if (!loginId.equals(session.getAttribute(Constants.WEB_LOGIN_ACCESS_KEY))) {
+			model.addAttribute("error", "页面已失效，请刷新重试");
+			return rendToLoginView(returnUrl, logoutUrl, session);
+		}
 		
 		User user = userService.verifyUserLogin(inputUser);
 		if (user == null) {
-			//回传返回地址、注销地址到隐藏域
-			model.addAttribute(RETURN_URL_KEY, returnUrl);
-			model.addAttribute(LOGOUT_URL_KEY, logoutUrl);
 			model.addAttribute("error", "用户名或密码错误!");
-			return "login";
+			return rendToLoginView(returnUrl, logoutUrl, session);
 		}
 		else {
 			session.setAttribute("user", user);
 			if (rememberMe == Boolean.TRUE) {
-				//"记住我"
-				session.setMaxInactiveInterval(REMEMBER_LOGIN_STATE_TIME);
-				Cookie sessionCookie = CookieUtil.getCookie(request, Constants.GLOBAL_SESSION_ID);
-				if (sessionCookie != null) {
-					sessionCookie.setMaxAge(REMEMBER_LOGIN_STATE_TIME);
-					response.addCookie(sessionCookie);
-				}
+				rememberMe(session, req, resp);
 			}
 
-			if (StringUtils.isNotBlank(returnUrl) && StringUtils.isNotBlank(logoutUrl)) {
-				logger.debug("user {} login from {} logout url is {}", new Object[]{user.getName(), returnUrl, logoutUrl});
-			}
-			else {
-				logger.debug("user {} login", user.getName());
-			}
+			logger.debug("user {} login, from {} logout url is {}", new Object[]{user.getName(), returnUrl, logoutUrl});
 			
 			//存储客户端注销地址
 			storeLogoutUrl(session, logoutUrl);
 			
 			//携带token返回客户端站点
 			if (StringUtils.isNotBlank(returnUrl)) {
-				backToClient(returnUrl, session, response);
+				backToClient(returnUrl, session, resp);
 				return null;
 			}
 			
 			return "redirect:/index";
 		}
+	}
+	
+	private void rememberMe(HttpSession session, HttpServletRequest req, HttpServletResponse resp) {
+		session.setMaxInactiveInterval(REMEMBER_LOGIN_STATE_TIME);
+		Cookie sessionCookie = CookieUtil.getCookie(req, Constants.GLOBAL_SESSION_ID);
+		if (sessionCookie != null) {
+			sessionCookie.setMaxAge(REMEMBER_LOGIN_STATE_TIME);
+			resp.addCookie(sessionCookie);
+		}
+	}
+
+	private String rendToLoginView(String returnUrl, String logoutUrl, HttpSession session) {
+		//返回地址、注销地址存入表单隐藏域
+		SpringUtils.setAttribute(Constants.WEB_RETURN_URL_KEY, returnUrl);
+		SpringUtils.setAttribute(Constants.WEB_LOGOUT_URL_KEY, logoutUrl);
+		String loginId = UUID.randomUUID().toString();
+		SpringUtils.setAttribute(Constants.WEB_LOGIN_ACCESS_KEY, loginId);
+		session.setAttribute(Constants.WEB_LOGIN_ACCESS_KEY, loginId);
+		return "login";
 	}
 
 	/**
@@ -163,7 +152,7 @@ public class SystemController {
 			return;
 		
 		@SuppressWarnings("unchecked")
-		List<String> logoutUrls = (List<String>) session.getAttribute(LOGOUT_URL_KEY);
+		List<String> logoutUrls = (List<String>) session.getAttribute(Constants.WEB_LOGOUT_URL_KEY);
 		if (logoutUrls == null) {
 			logoutUrls = new ArrayList<>();
 		}
@@ -171,16 +160,10 @@ public class SystemController {
 		logoutUrls.add(URLDecoder.decode(logoutUrl, URL_ENCODING_CHARSET.name()));
 		
 		//即时交互缓存的序列化实现的session，对象实例变化，此处需要重新set
-		session.setAttribute(LOGOUT_URL_KEY, logoutUrls);
+		session.setAttribute(Constants.WEB_LOGOUT_URL_KEY, logoutUrls);
 	}
 
-	/**
-	 * 携带token返回客户端站点
-	 * @param returnUrl
-	 * @param session
-	 * @param response
-	 * @throws IOException
-	 */
+	/** 携带token返回客户端站点 */
 	private void backToClient(String returnUrl, HttpSession session, HttpServletResponse response) throws IOException {
 		UrlBuilder builder = UrlBuilder.parse(URLDecoder.decode(returnUrl, URL_ENCODING_CHARSET.name()));
 		builder.addParameter(TICKET_KEY, session.getId());
@@ -188,16 +171,11 @@ public class SystemController {
 	}
 	
 	
-	/**
-	 * 注销全局会话，并向客户端站点发送注销消息
-	 * 
-	 * @param session
-	 * @return
-	 */
+	/** 注销全局会话，并向客户端站点发送注销消息 */
 	@RequestMapping(value = "/logout")
 	public String logout(HttpSession session, HttpServletResponse response) {
 		@SuppressWarnings("unchecked")
-		List<String> logoutUrls = (List<String>) session.getAttribute(LOGOUT_URL_KEY);
+		List<String> logoutUrls = (List<String>) session.getAttribute(Constants.WEB_LOGOUT_URL_KEY);
 
 		//send logout message
 		if (logoutUrls != null) {
@@ -222,21 +200,4 @@ public class SystemController {
 	public Object validatetoken(HttpSession session) {
 		return session.getAttribute("user");
 	}
-	
-	/**
-	 * 网页轮询验证扫码登录
-	 * @param session
-	 * @return 用户是否已登录
-	 */
-	@RequestMapping(value = "/verifyQRCodeLogin", method = RequestMethod.POST)
-	@ResponseBody
-	public Boolean verifyQRCodeLogin(HttpSession session) {
-		if (session.getAttribute("user") == null) {
-			return Boolean.FALSE;
-		}
-		else {
-			return Boolean.TRUE;
-		}
-	}
-	
 }

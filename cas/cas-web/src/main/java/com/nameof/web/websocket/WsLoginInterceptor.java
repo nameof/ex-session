@@ -12,6 +12,8 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
+import com.nameof.common.constant.Constants;
+
 public class WsLoginInterceptor implements HandshakeInterceptor {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(WsLoginInterceptor.class);
@@ -31,7 +33,7 @@ public class WsLoginInterceptor implements HandshakeInterceptor {
 		
 		ServletServerHttpRequest serverHttpRequest = (ServletServerHttpRequest) req;
 		HttpSession session = serverHttpRequest.getServletRequest().getSession();
-		map.put("token", session.getId());//put session id to websocket websession attribute
+		map.put(Constants.GLOBAL_SESSION_ID, session.getId());//put session id to websocket websession attribute
 		return true;
 	}
 

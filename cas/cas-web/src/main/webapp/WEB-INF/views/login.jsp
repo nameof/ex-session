@@ -10,7 +10,8 @@
 <body>
 	<div class="container">
 		<form class="form-signin" action="${pageContext.request.contextPath}/processLogin" method="post">
-			
+			<input type="hidden" name="loginId" id="loginId" value="${loginId}" />
+			<input type="hidden" name="userWebScoket" id="userWebScoket" value="${applicationScope.loginWithWebSocket}" />
 			<input type="hidden" name="returnUrl" value="${returnUrl}" />
 			<input type="hidden" name="logoutUrl" value="${logoutUrl}" />
 			
@@ -32,7 +33,7 @@
 			<span style="color:red;">${error}</span>
 			
 			<br /><br /> 使用CAS客户端扫描下方二维码，快捷登录<br />
-			<img src="${pageContext.request.contextPath}/public/loginQRCode" width="300px" height="300px" alt="二维码">
+			<img src="${pageContext.request.contextPath}/public/loginQRCode?loginId=${loginId}" width="300px" height="300px" alt="二维码">
 		</form>
 	</div>
 </body>
@@ -42,9 +43,10 @@
 <script type="text/javascript">
 
    	function queryLoginState() {
-   		$.post("${pageContext.request.contextPath}/verifyQRCodeLogin","",function (data) {
+   		var data = "loginId=" + $('#loginId').val();
+   		$.post("${pageContext.request.contextPath}/verifyQRCodeLogin", data, function (data) {
    			if (data) {
-   				window.location.href = "${pageContext.request.contextPath}/index";
+   				loginSuccess();
    			}
    		});
    	}
@@ -63,17 +65,21 @@
    			console.log(msg);
    			var result = JSON.parse(msg.data);
    			if (result.login) {
-   				window.location.href = "${pageContext.request.contextPath}/index";
+   				loginSuccess();
    			}
    		};
    	}
    	
+   	function loginSuccess() {
+   		window.location.href = "${pageContext.request.contextPath}/index";
+   	}
+   	
    	$(function () {
-   		<c:if test="${applicationScope.loginWithWebSocket}">
+   		var userWs = $('#userWebScoket').val();
+   		if (userWs) {
    			receiveLoginStateWithWebSocket();
-   		</c:if>
-   		<c:if test="${!applicationScope.loginWithWebSocket}">
+   		} else {
    			window.setInterval("queryLoginState();", 3000);
-   		</c:if>
+   		}
    	});
 </script>

@@ -12,6 +12,8 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.nameof.common.constant.Constants;
+
 @Component
 public class WsLoginHandler extends TextWebSocketHandler {
 	
@@ -19,15 +21,13 @@ public class WsLoginHandler extends TextWebSocketHandler {
     
 	private static final Map<String, WebSocketSession> users;
     
-    private static final String CLIENT_ID = "token";
-
     static {
         users = new ConcurrentHashMap<>();
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-    	String token = (String) session.getAttributes().get(CLIENT_ID);
+    	String token = (String) session.getAttributes().get(Constants.GLOBAL_SESSION_ID);
         users.put(token, session);
         
         LOG.debug("afterConnectionEstablished , http session id : {}", token);
@@ -68,12 +68,12 @@ public class WsLoginHandler extends TextWebSocketHandler {
 
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-    	users.remove((String) session.getAttributes().get(CLIENT_ID));
+    	users.remove((String) session.getAttributes().get(Constants.GLOBAL_SESSION_ID));
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        users.remove((String) session.getAttributes().get(CLIENT_ID));
+        users.remove((String) session.getAttributes().get(Constants.GLOBAL_SESSION_ID));
     }
 
     @Override
