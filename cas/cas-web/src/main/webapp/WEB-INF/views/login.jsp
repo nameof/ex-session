@@ -37,42 +37,43 @@
 	</div>
 </body>
 </html>
-<script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js" />
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" />
+<script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-    	function queryLoginState() {
-    		$.post("${pageContext.request.contextPath}/verifyQRCodeLogin","",function (data) {
-    			if (data) {
-    				window.location.href = "${pageContext.request.contextPath}/index";
-    			}
-    		});
-    	}
-    	
-    	function receiveLoginStateWithWebSocket() {
-    		var ws = new WebSocket("ws://localhost:8080${pageContext.request.contextPath}/wsLogin");
-    		ws.onopen = function () {
-    			console.log("onpen");
-    		};
-    		
-    		ws.onclose = function () {
-    			console.log("onclose");
-    		};
-    		
-    		ws.onmessage = function (msg) {
-    			console.log(msg);
-    			var result = JSON.parse(msg.data);
-    			if (result.login) {
-    				window.location.href = "${pageContext.request.contextPath}/index";
-    			}
-    		};
-    	}
-    	
-    	$(function () {
-    		<c:if test="${applicationScope.loginWithWebSocket}">
-    			receiveLoginStateWithWebSocket();
-    		</c:if>
-    		<c:if test="${!applicationScope.loginWithWebSocket}">
-    			window.setInterval("queryLoginState();", 3000);
-    		</c:if>
-    	});
+
+   	function queryLoginState() {
+   		$.post("${pageContext.request.contextPath}/verifyQRCodeLogin","",function (data) {
+   			if (data) {
+   				window.location.href = "${pageContext.request.contextPath}/index";
+   			}
+   		});
+   	}
+   	
+   	function receiveLoginStateWithWebSocket() {
+   		var ws = new WebSocket("ws://localhost:8080${pageContext.request.contextPath}/wsLogin");
+   		ws.onopen = function () {
+   			console.log("onpen");
+   		};
+   		
+   		ws.onclose = function () {
+   			console.log("onclose");
+   		};
+   		
+   		ws.onmessage = function (msg) {
+   			console.log(msg);
+   			var result = JSON.parse(msg.data);
+   			if (result.login) {
+   				window.location.href = "${pageContext.request.contextPath}/index";
+   			}
+   		};
+   	}
+   	
+   	$(function () {
+   		<c:if test="${applicationScope.loginWithWebSocket}">
+   			receiveLoginStateWithWebSocket();
+   		</c:if>
+   		<c:if test="${!applicationScope.loginWithWebSocket}">
+   			window.setInterval("queryLoginState();", 3000);
+   		</c:if>
+   	});
 </script>
