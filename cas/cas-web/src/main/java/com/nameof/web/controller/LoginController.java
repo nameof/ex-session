@@ -5,7 +5,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.Cookie;
@@ -19,11 +21,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nameof.common.constant.Constants;
 import com.nameof.common.domain.User;
 import com.nameof.common.utils.CookieUtil;
+import com.nameof.common.utils.JwtUtils;
 import com.nameof.common.utils.SpringUtils;
 import com.nameof.common.utils.UrlBuilder;
 import com.nameof.mq.message.LogoutMessage;
@@ -35,9 +37,6 @@ public class LoginController extends BaseController {
 
 	/** "记住我"过期策略为15天，作用于Cookie的maxAge，Session的MaxInactiveInterval */
 	private static final int REMEMBER_LOGIN_STATE_TIME = 15 * 24 * 60 * 60;
-	
-	/** 票据传递参数名 */
-	private static final String TICKET_KEY = Constants.GLOBAL_SESSION_ID;
 	
 	private static final Charset URL_ENCODING_CHARSET = Charset.forName("UTF-8");
 	
@@ -63,7 +62,7 @@ public class LoginController extends BaseController {
 				//存储客户端注销地址
 				storeLogoutUrl(session, logoutUrl);
 
-				//直接携带token返回客户端站点
+				//返回客户端站点
 				backToClient(returnUrl, session, resp);
 				return null;
 			}
@@ -111,7 +110,7 @@ public class LoginController extends BaseController {
 			//存储客户端注销地址
 			storeLogoutUrl(session, logoutUrl);
 			
-			//携带token返回客户端站点
+			//返回客户端站点
 			if (StringUtils.isNotBlank(returnUrl)) {
 				backToClient(returnUrl, session, resp);
 				return null;
@@ -163,10 +162,15 @@ public class LoginController extends BaseController {
 		session.setAttribute(Constants.WEB_LOGOUT_URL_KEY, logoutUrls);
 	}
 
-	/** 携带token返回客户端站点 */
+	/** 颁发JWT票据，并将用户名信息与全局sessiod存储在JWT中，返回客户端站点 */
 	private void backToClient(String returnUrl, HttpSession session, HttpServletResponse response) throws IOException {
+		User user = (User) session.getAttribute("user");
+		Map<String, Object> data = new HashMap<>(1);
+		data.put("gloabSessionId", session.getId());
+		String ticket = JwtUtils.generateSSOTicket(user.getName(), data);
+		
 		UrlBuilder builder = UrlBuilder.parse(URLDecoder.decode(returnUrl, URL_ENCODING_CHARSET.name()));
-		builder.addParameter(TICKET_KEY, session.getId());
+		builder.addParameter(Constants.SSO_TICKET_KEY, ticket);
 		response.sendRedirect(builder.toString());
 	}
 	
@@ -186,18 +190,5 @@ public class LoginController extends BaseController {
 		
 		session.invalidate();
 		return "redirect:/login";
-	}
-	
-	
-	/**
-	 * 为客户端站点验证token
-	 * TODO 安全问题
-	 * @param session
-	 * @return JSON格式的用户信息
-	 */
-	@RequestMapping(value = "/validatetoken", method = RequestMethod.POST)
-	@ResponseBody
-	public Object validatetoken(HttpSession session) {
-		return session.getAttribute("user");
 	}
 }

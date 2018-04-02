@@ -20,4 +20,7 @@ public interface Constants {
 	
 	/** 注销地址参数名 */
 	String WEB_LOGOUT_URL_KEY = "logoutUrl";
+	
+	/** 单点登录授权票据 */
+	String SSO_TICKET_KEY = "jwtTicket";
 }

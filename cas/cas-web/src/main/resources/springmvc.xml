@@ -60,6 +60,7 @@
 	        <mvc:exclude-mapping path="/validatetoken"/>
 	        <mvc:exclude-mapping path="/public/**"/>
 	        <mvc:exclude-mapping path="/app/**"/>
+	        <mvc:exclude-mapping path="/sso/**"/>
 	        <bean class="com.nameof.web.interceptor.LoginInterceptor"/>
 	    </mvc:interceptor>
 	    <!-- app -->

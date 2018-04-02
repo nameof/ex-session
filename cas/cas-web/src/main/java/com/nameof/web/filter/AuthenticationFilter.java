@@ -23,6 +23,7 @@ import com.nameof.web.custom.component.factory.CacheHttpSessionFactory;
  * @author ChengPan
  */
 @Component("authenticationFilter")
+@Deprecated
 public class AuthenticationFilter implements Filter {
 
 	@Autowired
