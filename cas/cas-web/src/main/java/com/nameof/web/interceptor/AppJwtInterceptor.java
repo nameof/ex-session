@@ -31,7 +31,7 @@ public class AppJwtInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 		
-		String jwt = request.getHeader(Constants.WEB_HEADER_JWT);
+		String jwt = request.getHeader(Constants.WEB_HEADER_APP_JWT);
 		HandleResult result = HandleResult.error();
 		if (StringUtils.isEmpty(jwt)) {
 			result.setInfo("非法请求");

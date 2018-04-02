@@ -7,10 +7,12 @@ import io.jsonwebtoken.SignatureException;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nameof.common.constant.Constants;
 import com.nameof.common.domain.HandleResult;
 import com.nameof.common.utils.JwtUtils;
 
@@ -24,7 +26,8 @@ public class SSOController extends BaseController {
 	 * @return JWT中存储的用户名、全局sessionid
 	 */
 	@RequestMapping(value = "/validateTicket", method = RequestMethod.POST)
-	public HandleResult validatetoken(HttpSession session, String jwtTicket) {
+	public HandleResult validatetoken(HttpSession session
+				, @RequestHeader(value = Constants.SSO_HEADER_TICKET_KEY)String jwtTicket) {
 		if (StringUtils.isEmpty(jwtTicket)) {
 			return HandleResult.error("非法请求");
 		}

@@ -23,7 +23,7 @@ public class LogoutFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse resp,
 			FilterChain arg2) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
-		String token = request.getParameter("token");
+		String token = request.getParameter("token");//实际上就是cas的全局session Id
 		HttpSession session = LogedSessionManager.get(token);
 		if (session != null) {
 			session.invalidate();

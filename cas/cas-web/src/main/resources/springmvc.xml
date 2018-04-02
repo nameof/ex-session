@@ -43,8 +43,15 @@
     <bean id="appIdInterceptor" class="com.nameof.web.interceptor.AppIdInterceptor">
     	<constructor-arg>
     		<list>
-    			<!-- 合法的AppId -->
     			<value>AiOjE1MjI0NzcyODQeyJzdWIiOiJKb2UiLCJleHsIjQiOiI0In0</value>
+    		</list>
+    	</constructor-arg>
+    </bean>
+    
+    <bean id="ssoClientIdInterceptor" class="com.nameof.web.interceptor.SSOClientIdInterceptor">
+    	<constructor-arg>
+    		<list>
+    			<value>CJleHsIjQiOiI0In0AiOjE1MjIDQeyJzdWIiOiJKb2UiLCJ</value>
     		</list>
     	</constructor-arg>
     </bean>
@@ -72,6 +79,11 @@
 	    	<mvc:mapping path="/app/**"/>
 	    	<mvc:exclude-mapping path="/app/login"/>
 	    	<bean class="com.nameof.web.interceptor.AppJwtInterceptor"/>
+	    </mvc:interceptor>
+	    <!-- sso -->
+	    <mvc:interceptor>
+	    	<mvc:mapping path="/sso/**"/>
+	    	<ref bean="ssoClientIdInterceptor"/>
 	    </mvc:interceptor>
 	</mvc:interceptors>
 

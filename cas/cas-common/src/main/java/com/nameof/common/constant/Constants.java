@@ -7,11 +7,14 @@ public interface Constants {
 	/** spring profile */
 	String SPRING_PROFILES_ACTIVE = "spring.profiles.active";
 	
+	/** like JSESSIONID */
 	String GLOBAL_SESSION_ID = "token";
 	
-	String WEB_HEADER_APPID = "AppId";
+	/** APP客户端传递AppId的header */
+	String WEB_HEADER_APP_ID = "AppId";
 	
-	String WEB_HEADER_JWT = "JWT";
+	/** APP客户端传递JWT的header */
+	String WEB_HEADER_APP_JWT = "JWT";
 	
 	String WEB_LOGIN_ACCESS_KEY = "loginId";
 	
@@ -23,4 +26,10 @@ public interface Constants {
 	
 	/** 单点登录授权票据 */
 	String SSO_TICKET_KEY = "jwtTicket";
+	
+	/** 单点登录客户端回传授权票据的header */
+	String SSO_HEADER_TICKET_KEY = "jwtTicket";
+	
+	/** 单点登录客户端传递的ClientId header */
+	String SSO_HEADER_CLIENT_ID = "ClientId";
 }

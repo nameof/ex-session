@@ -14,28 +14,28 @@ import com.nameof.common.domain.HandleResult;
 import com.nameof.common.utils.ResponseUtils;
 
 /**
- * 简单的验证APP请求是否包含合法的AppId，此防护虽然是脆弱的，但与使用非对称的身份验证区别不大，只是尽量避免不合法请求
+ * 验证接入CAS的客户端站点
  * @author ChengPan
  */
-public class AppIdInterceptor implements HandlerInterceptor {
+public class SSOClientIdInterceptor  implements HandlerInterceptor {
 	
-	/** 允许访问的AppId */
-	private List<String> appIds = null;
+	/** 允许授权访问的ClientId */
+	private List<String> clientIds = null;
 	
-	public AppIdInterceptor(List<String> ids) {
-		this.appIds = ids;
+	public SSOClientIdInterceptor(List<String> ids) {
+		this.clientIds = ids;
 	}
 
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
-		String appId = request.getHeader(Constants.WEB_HEADER_APP_ID);
-		if (StringUtils.isEmpty(appId)|| !appIds.contains(appId)) {
-			HandleResult error = HandleResult.error("非法请求");
+		String clientId = request.getHeader(Constants.SSO_HEADER_CLIENT_ID);
+		if (StringUtils.isEmpty(clientId) || !clientIds.contains(clientId)) {
+			HandleResult error = HandleResult.error("未授权的客户端请求");
 			ResponseUtils.writeAsJson(response, error);
 			return false;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
@@ -47,5 +47,4 @@ public class AppIdInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {}
-
 }

@@ -9,6 +9,17 @@ public class SSOConfiguration {
 	private String clientLogoutUrl = "http://localhost:8080/sso-client/logout";
 	
 	private String validateTicketUrl = "http://localhost:8080/cas-web/sso/validateTicket";
+	
+	/** 接入CAS的授权ID，在验证ticket时传递 */
+	private String clientId = "";
+	
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
 
 	public String getCasLoginUrl() {
 		return casLoginUrl;

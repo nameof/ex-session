@@ -67,6 +67,11 @@ public class AuthenticationFilter implements Filter {
 		if (StringUtils.isNotBlank(casLogoutUrl)) {
 			ssoConfig.setCasLogoutUrl(casLogoutUrl);
 		}
+		
+		String clientId = config.getInitParameter("ClientId");
+		if (StringUtils.isNotBlank(clientId)) {
+			ssoConfig.setClientId(clientId);
+		}
 	}
 
 	@Override

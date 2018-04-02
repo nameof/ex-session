@@ -2,6 +2,8 @@ package com.nameof.sso.client.web.sso;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,8 +24,14 @@ public class SingleSignOnDispatcher {
 	/** 注销地址参数名 */
 	private static  final String LOGOUT_URL_KEY = "logoutUrl";
 
-	/** 票据传递参数名 */
-	private static  final String TICKET_KEY = "jwtTicket";
+	/** CAS授权给客户端的票据传递参数名 */
+	private static  final String AUTHC_TICKET_KEY = "jwtTicket";
+	
+	/** 回传给CAS的票据header名  */
+	private static  final String VALIDATE_HEADER_TICKET_KEY = "jwtTicket";
+	
+	/** 回传给CAS的ClientID header名  */
+	private static  final String VALIDATE_HEADER_CLIENTID_KEY = "ClientId";
 	
 	/**
 	 * 第一阶段，跳转到CAS进行登录
@@ -48,9 +56,11 @@ public class SingleSignOnDispatcher {
 	 * @throws IOException
 	 */
 	public void phaseTwo(HttpServletRequest request, HttpServletResponse response, SSOConfiguration ssoConfig) throws IOException {
-		String ticket = request.getParameter("jwtTicket");
-		String param = "jwtTicket=" + ticket;
-		HandleResult result = HttpRequest.postHandleResult(ssoConfig.getValidateTicketUrl(), param, null);
+		String ticket = request.getParameter(AUTHC_TICKET_KEY);
+		Map<String, String> header = new HashMap<>();
+		header.put(VALIDATE_HEADER_TICKET_KEY, ticket);
+		header.put(VALIDATE_HEADER_CLIENTID_KEY, ssoConfig.getClientId());
+		HandleResult result = HttpRequest.postHandleResult(ssoConfig.getValidateTicketUrl(), null, header);
 		if (result.isState()) {
 			String username = result.getString("subject");
 			User user = new User(username, "");
@@ -68,9 +78,11 @@ public class SingleSignOnDispatcher {
 			request.getSession().setAttribute("CasLogoutUrl", ssoConfig.getCasLogoutUrl());
 
 			UrlBuilder builder = UrlBuilder.parse(request.getRequestURL().toString());
-			builder.removeParameter(TICKET_KEY);
+			builder.removeParameter(AUTHC_TICKET_KEY);
 			response.sendRedirect(builder.toString());
+			return;
 		}
+		throw new IllegalStateException(result.getInfo());
 	}
 
 }
