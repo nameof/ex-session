@@ -35,7 +35,7 @@ public class SSOClientIdInterceptor  implements HandlerInterceptor {
 			ResponseUtils.writeAsJson(response, error);
 			return false;
 		}
-		return false;
+		return true;
 	}
 
 	@Override
