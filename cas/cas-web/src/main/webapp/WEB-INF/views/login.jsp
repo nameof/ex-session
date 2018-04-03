@@ -12,8 +12,8 @@
 		<form class="form-signin" action="${pageContext.request.contextPath}/processLogin" method="post">
 			<input type="hidden" name="loginId" id="loginId" value="${loginId}" />
 			<input type="hidden" name="userWebScoket" id="userWebScoket" value="${applicationScope.loginWithWebSocket}" />
-			<input type="hidden" name="returnUrl" value="${returnUrl}" />
-			<input type="hidden" name="logoutUrl" value="${logoutUrl}" />
+			<input type="hidden" name="returnUrl" id="returnUrl" value="${returnUrl}" />
+			<input type="hidden" name="logoutUrl" id="logoutUrl"  value="${logoutUrl}" />
 			
 			<label for="name" class="sr-only">用户名</label>
 			<input type="text" name="name" class="form-control" placeholder="用户名" required autofocus/>
@@ -71,7 +71,9 @@
    	}
    	
    	function loginSuccess() {
-   		window.location.href = "${pageContext.request.contextPath}/index";
+   		var logoutUrl = $('#logoutUrl').val();
+   		var returnUrl = $('#returnUrl').val();
+   		window.location.href = "${pageContext.request.contextPath}/login?logoutUrl=" + logoutUrl + "&returnUrl=" + returnUrl;
    	}
    	
    	$(function () {
