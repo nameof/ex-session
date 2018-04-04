@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureException;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,12 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nameof.common.constant.Constants;
 import com.nameof.common.domain.HandleResult;
-import com.nameof.common.utils.JwtUtils;
+import com.nameof.common.jwt.JwtHandler;
 
 @RestController
 @RequestMapping("/sso")
 public class SSOController extends BaseController {
 
+	@Autowired
+	private JwtHandler jwtHandler;
+	
 	/**
 	 * 为客户端站点验证token, 返回单点登录用户信息和全局sessionid
 	 * @param session
@@ -32,7 +36,7 @@ public class SSOController extends BaseController {
 			return HandleResult.error("非法请求");
 		}
 		try {
-			Claims claims = JwtUtils.getClaims(jwtTicket);
+			Claims claims = jwtHandler.getClaims(jwtTicket);
 			HandleResult result = HandleResult.success();
 			result.put("subject", claims.getSubject());
 			result.put("gloabSessionId", claims.get("gloabSessionId"));

@@ -1,9 +1,9 @@
 package com.nameof.web.interceptor;
 
-import java.io.IOException;
-
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
+
+import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,12 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.nameof.common.constant.Constants;
 import com.nameof.common.domain.HandleResult;
-import com.nameof.common.utils.JwtUtils;
+import com.nameof.common.jwt.JwtHandler;
 import com.nameof.common.utils.ResponseUtils;
 
 /**
@@ -27,6 +28,12 @@ public class AppJwtInterceptor implements HandlerInterceptor {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AppJwtInterceptor.class);
 	
+	private JwtHandler jwtHandler;
+	
+	public void setJwtHandler(JwtHandler jwtHandler) {
+		this.jwtHandler = jwtHandler;
+	}
+
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
@@ -38,7 +45,7 @@ public class AppJwtInterceptor implements HandlerInterceptor {
 			return result(response, result);
 		}
 		try {
-			JwtUtils.validate(jwt);
+			jwtHandler.validate(jwt);
 			result.setState(true);
 		} catch (ExpiredJwtException e) {
 			result.setInfo("授权已过期，请重新登录");

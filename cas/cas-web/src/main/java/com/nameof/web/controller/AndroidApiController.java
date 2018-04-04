@@ -13,7 +13,7 @@ import org.springframework.web.socket.TextMessage;
 import com.alibaba.fastjson.JSONObject;
 import com.nameof.common.domain.HandleResult;
 import com.nameof.common.domain.User;
-import com.nameof.common.utils.JwtUtils;
+import com.nameof.common.jwt.JwtHandler;
 import com.nameof.service.UserService;
 import com.nameof.web.websocket.WsLoginHandler;
 
@@ -26,6 +26,9 @@ public class AndroidApiController {
 	
 	@Autowired
 	private WsLoginHandler wsLoginHandler;
+	
+	@Autowired
+	private JwtHandler jwtHandler;
 	
 	@Value("${login.websocket.enable}")
 	private boolean loginWithWebSocket;
@@ -41,7 +44,7 @@ public class AndroidApiController {
 		}
 		HandleResult result = HandleResult.success("登录成功");
 		result.put("userInfo", user);
-		result.put("accessToken", JwtUtils.generate(user.getName()));
+		result.put("accessToken", jwtHandler.generateAppToken(user.getName()));
 		return result;
 	}
 	

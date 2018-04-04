@@ -9,7 +9,9 @@
 		<param-value>classpath:spring-basic.xml</param-value>
 	</context-param>
 	
-	<!-- 选择SESSION缓存的实现 -->
+	<!-- 
+		选择SESSION缓存的实现：spring-session, redis, redisson, redis-template, ehcache, memcached
+	 -->
 	<context-param>
 		<param-name>spring.profiles.active</param-name>
 		<param-value>spring-session</param-value>

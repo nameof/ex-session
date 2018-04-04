@@ -78,7 +78,9 @@
 	     <mvc:interceptor>
 	    	<mvc:mapping path="/app/**"/>
 	    	<mvc:exclude-mapping path="/app/login"/>
-	    	<bean class="com.nameof.web.interceptor.AppJwtInterceptor"/>
+	    	<bean class="com.nameof.web.interceptor.AppJwtInterceptor">
+	    		<property name="jwtHandler" ref="jwtHandler"/>
+	    	</bean>
 	    </mvc:interceptor>
 	    <!-- sso -->
 	    <mvc:interceptor>

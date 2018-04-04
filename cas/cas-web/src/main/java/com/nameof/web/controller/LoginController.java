@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.nameof.common.constant.Constants;
 import com.nameof.common.domain.User;
+import com.nameof.common.jwt.JwtHandler;
 import com.nameof.common.utils.CookieUtil;
-import com.nameof.common.utils.JwtUtils;
 import com.nameof.common.utils.SpringUtils;
 import com.nameof.common.utils.UrlBuilder;
 import com.nameof.mq.message.LogoutMessage;
@@ -46,6 +46,8 @@ public class LoginController extends BaseController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private JwtHandler jwtHandler;
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(String returnUrl,
@@ -167,7 +169,7 @@ public class LoginController extends BaseController {
 		User user = (User) session.getAttribute("user");
 		Map<String, Object> data = new HashMap<>(1);
 		data.put("gloabSessionId", session.getId());
-		String ticket = JwtUtils.generateSSOTicket(user.getName(), data);
+		String ticket = jwtHandler.generateSSOTicket(user.getName(), data);
 		
 		UrlBuilder builder = UrlBuilder.parse(URLDecoder.decode(returnUrl, URL_ENCODING_CHARSET.name()));
 		builder.addParameter(Constants.SSO_TICKET_KEY, ticket);
