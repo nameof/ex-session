@@ -14,14 +14,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.redisson.client.codec.Codec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.serializer.RedisSerializer;
 
 import com.nameof.cache.CacheDao;
 import com.nameof.common.utils.RedisUtil;
 
 /**
- * 基于Redis的缓存数据访问层
+ * 基于Jedis的缓存数据访问层
+ * XXX 这里仅仅使用了JDK的序列化，不过项目中已引入redisson和spring-data-redis，其实可以使用它们已提供的
+ * {@link Codec}和{@link RedisSerializer}相关实现类，以支持多种序列化方式
  * @author ChengPan
  */
 public class RedisCacheDao implements CacheDao {
