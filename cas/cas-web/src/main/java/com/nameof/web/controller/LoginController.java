@@ -31,6 +31,7 @@ import com.nameof.common.utils.UrlBuilder;
 import com.nameof.mq.message.LogoutMessage;
 import com.nameof.mq.sender.Sender;
 import com.nameof.service.UserService;
+import com.nameof.web.aop.log.AutoLog;
 
 @Controller
 public class LoginController extends BaseController {
@@ -78,6 +79,7 @@ public class LoginController extends BaseController {
 
 	/** 处理网页登录 */
 	@RequestMapping(value = "/processLogin", method = RequestMethod.POST)
+	@AutoLog(description = "登录")
 	public String processLogin(User inputUser,
 							   Boolean rememberMe,
 							   String returnUrl,

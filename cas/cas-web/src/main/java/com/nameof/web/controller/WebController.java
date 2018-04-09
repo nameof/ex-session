@@ -15,12 +15,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.zxing.WriterException;
 import com.nameof.common.constant.Constants;
 import com.nameof.common.utils.QRCodeUtils;
+import com.nameof.web.aop.log.AutoLog;
 
 @Controller
 @RequestMapping("/public")
 public class WebController extends BaseController {
 	
 	@RequestMapping(value = "setAttribute", method = RequestMethod.POST)
+	@AutoLog(description = "setAttribute")
 	public String setAttribute(String attributeName, String attributeValue,
 			HttpSession session) throws WriterException, IOException {
 		session.setAttribute(attributeName, attributeValue);
