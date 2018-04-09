@@ -18,6 +18,9 @@ public interface Constants {
 	
 	String WEB_LOGIN_ACCESS_KEY = "loginId";
 	
+	/** springmvc当前请求的Handler */
+	String WEB_MVC_CURRENT_HANDLER = "@@currentHandler";
+	
 	/** 返回地址参数名 */
 	String WEB_RETURN_URL_KEY = "returnUrl";
 	

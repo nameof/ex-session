@@ -58,13 +58,14 @@
     
     <mvc:interceptors>
     	<!-- web -->
+    	<mvc:interceptor>
+	        <mvc:mapping path="/**" />
+	        <bean class="com.nameof.web.interceptor.BeforeRequestInterceptor"/>
+	    </mvc:interceptor>
 	    <mvc:interceptor>
 	        <mvc:mapping path="/**" />
 	        <mvc:exclude-mapping path="/login"/>
 	        <mvc:exclude-mapping path="/processLogin"/>
-	        <mvc:exclude-mapping path="/processQRCodeLogin"/>
-	        <mvc:exclude-mapping path="/verifyQRCodeLogin"/>
-	        <mvc:exclude-mapping path="/validatetoken"/>
 	        <mvc:exclude-mapping path="/public/**"/>
 	        <mvc:exclude-mapping path="/app/**"/>
 	        <mvc:exclude-mapping path="/sso/**"/>

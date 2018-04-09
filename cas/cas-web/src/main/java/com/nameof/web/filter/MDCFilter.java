@@ -20,9 +20,12 @@ public class MDCFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-		storeMDC(request);
-		chain.doFilter(request, response);
-		MDC.clear();
+		try {
+			storeMDC(request);
+			chain.doFilter(request, response);
+		} finally {
+			MDC.clear();
+		}
 	}
 
 	private void storeMDC(ServletRequest request) {
