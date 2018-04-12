@@ -68,10 +68,15 @@ public class BufferedCacheHttpSession extends AbstractCacheHttpSession
 	
 	private void initCreateTime() {
 		if (isNew()) {
-			attributes.put(CACHE_CREATE_TIME_KEY, getCreationTime());
+			attributes.put(CACHE_CREATE_TIME_KEY, super.getCreationTime());
 			return;
 		}
-		setCreationTime((Long) attributes.get(CACHE_CREATE_TIME_KEY));
+		//非新的Session，应当已存在createTime属性，但避免手动操作缓存，将属性清空，造成空指针和createTime丢失
+		Long createTime = (Long) attributes.get(CACHE_CREATE_TIME_KEY);
+		if (createTime == null) {
+			attributes.put(CACHE_CREATE_TIME_KEY, super.getCreationTime());
+		}
+		setCreationTime(createTime != null ? createTime : super.getCreationTime());
 	}
 	
 	private void initLastAccessedTime() {

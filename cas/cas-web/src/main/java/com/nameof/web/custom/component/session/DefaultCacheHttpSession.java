@@ -57,7 +57,12 @@ public class DefaultCacheHttpSession extends AbstractCacheHttpSession implements
 			cacheDao.setAttribute(token, CACHE_CREATE_TIME_KEY, super.getCreationTime());
 			return;
 		}
-		setCreationTime((Long) cacheDao.getAttribute(token, CACHE_CREATE_TIME_KEY));
+		//非新的Session，应当已存在createTime属性，但避免手动操作缓存，将属性清空，造成空指针和createTime丢失
+		Long createTime = (Long) cacheDao.getAttribute(token, CACHE_CREATE_TIME_KEY);
+		if (createTime == null) {
+			cacheDao.setAttribute(token, CACHE_CREATE_TIME_KEY, super.getCreationTime());
+		}
+		setCreationTime(createTime != null ? createTime : super.getCreationTime());
 	}
 	
 
