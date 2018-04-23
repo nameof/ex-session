@@ -97,6 +97,7 @@ public class LoginController extends BaseController {
 			model.addAttribute("error", "页面已失效，请刷新重试");
 			return rendToLoginView(returnUrl, logoutUrl, session);
 		}
+		session.removeAttribute(Constants.WEB_LOGIN_ACCESS_KEY);
 		
 		User user = userService.verifyUserLogin(inputUser);
 		if (user == null) {
