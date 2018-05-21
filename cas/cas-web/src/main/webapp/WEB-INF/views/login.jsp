@@ -44,7 +44,7 @@
 
    	function queryLoginState() {
    		var data = "loginId=" + $('#loginId').val();
-   		$.post("${pageContext.request.contextPath}/verifyQRCodeLogin", data, function (data) {
+   		$.post("${pageContext.request.contextPath}/public/verifyQRCodeLogin", data, function (data) {
    			if (data) {
    				loginSuccess();
    			}
@@ -78,7 +78,7 @@
    	
    	$(function () {
    		var userWs = $('#userWebScoket').val();
-   		if (userWs) {
+   		if (userWs == 'true') {
    			receiveLoginStateWithWebSocket();
    		} else {
    			window.setInterval("queryLoginState();", 3000);
