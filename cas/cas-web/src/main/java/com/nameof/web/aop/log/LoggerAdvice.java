@@ -39,7 +39,7 @@ public class LoggerAdvice {
 		}
 		StringBuffer param = new StringBuffer("传入参数[{}] ");
 		for (Object obj : parames) {
-			param.append(ToStringBuilder.reflectionToString(obj)).append("  ");
+			param.append(obj == null ? "''  " : ToStringBuilder.reflectionToString(obj)).append("  ");
 		}
 		return param.toString();
 	}
