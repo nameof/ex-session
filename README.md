@@ -9,6 +9,19 @@
 
 # 使用
 &emsp;在核心配置文件cas-config.properties中配置redis，mecached相关连接信息，运行cas-web即可。
+## &emsp;docker-compose
+```
+$ wget https://github.com/nameof/ex-session-sso/archive/v0.0.2.tar.gz
+
+$ tar zxvf v0.0.2.tar.gz
+
+$ cd v0.0.2
+
+$ vi cas/cas-web/src/main/resources/cas-config.properties
+redis.host=redis
+
+$ docker-compose up -d
+```
 
 # session数据存储
 &emsp;ex-session-sso使用[spring profile](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-definition-profiles)机制实现多种session存储方式的切换，支持配置`redis`，`redisson`，`redis-template`，`memcached`，`ehcache`，`spring-session`。
