@@ -1,17 +1,17 @@
-# ex-session-sso
-&emsp;使用memcached、redis、ehcache等几种方式实现Servlet HttpSession会话数据的存储。没错，它的功能类似于[spring-session](https://projects.spring.io/spring-session)，所以ex-session-sso还提供了spring-session的整合和支持，核心原理就是通过servlet拦截器将默认的HttpSession替换为缓存实现。  
+# ex-session
+&emsp;使用memcached、redis、ehcache等几种方式实现Servlet HttpSession会话数据的存储。没错，它的功能类似于[spring-session](https://projects.spring.io/spring-session)，所以ex-session还提供了spring-session的整合和支持，核心原理就是通过servlet拦截器将默认的HttpSession替换为缓存实现。  
 &emsp;提取出Session的好处是显而易见的：
-* 会话数据不再是一个黑盒，我们可以对Session进行监控和自由访问。为此ex-session-sso集成了redis、memcached的监控系统[TreeNMS](http://www.treesoft.cn/dms.html)和ehcache的系统[ehcache-monitor-kit](http://terracotta.org/downloads/open-source/)。
+* 会话数据不再是一个黑盒，我们可以对Session进行监控和自由访问。为此ex-session集成了redis、memcached的监控系统[TreeNMS](http://www.treesoft.cn/dms.html)和ehcache的系统[ehcache-monitor-kit](http://terracotta.org/downloads/open-source/)。
 * 集成WebSocket，实现android客户端扫码登录。
 * 实现跨域单点登录。
 
-&emsp;但是同时带来的弊端就是丧失了Servlet原生Session相关Listener的处理能力。spring-session提供了自定义的[SessionEventHttpSessionListenerAdapter](https://docs.spring.io/spring-session/docs/current/reference/html5/#httpsession-httpsessionlistener)实现事件监听，ex-session-sso目前并没有提供类似的实现。
+&emsp;但是同时带来的弊端就是丧失了Servlet原生Session相关Listener的处理能力。spring-session提供了自定义的[SessionEventHttpSessionListenerAdapter](https://docs.spring.io/spring-session/docs/current/reference/html5/#httpsession-httpsessionlistener)实现事件监听，ex-session目前并没有提供类似的实现。
 
 # 使用
 &emsp;在核心配置文件cas-config.properties中配置redis，mecached相关连接信息，运行cas-web即可。
 ## &emsp;docker-compose
 ```
-$ wget https://github.com/nameof/ex-session-sso/archive/v0.0.2.tar.gz
+$ wget https://github.com/nameof/ex-session/archive/v0.0.2.tar.gz
 
 $ tar zxvf v0.0.2.tar.gz
 
@@ -24,7 +24,7 @@ $ docker-compose up -d
 ```
 
 # session数据存储
-&emsp;ex-session-sso使用[spring profile](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-definition-profiles)机制实现多种session存储方式的切换，支持配置`redis`，`redisson`，`redis-template`，`memcached`，`ehcache`，`spring-session`。
+&emsp;ex-session使用[spring profile](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-definition-profiles)机制实现多种session存储方式的切换，支持配置`redis`，`redisson`，`redis-template`，`memcached`，`ehcache`，`spring-session`。
 ``` 
   <context-param>
 		<param-name>spring.profiles.active</param-name>
