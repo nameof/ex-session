@@ -2,6 +2,7 @@
 &emsp;使用memcached、redis、ehcache等几种方式实现Servlet HttpSession会话数据的存储。没错，它的功能类似于[spring-session](https://projects.spring.io/spring-session)，所以ex-session还提供了spring-session的整合和支持，核心原理就是通过servlet拦截器将默认的HttpSession替换为缓存实现。  
 &emsp;提取出Session的好处是显而易见的：
 * 会话数据不再是一个黑盒，我们可以对Session进行监控和自由访问。为此ex-session集成了redis、memcached的监控系统[TreeNMS](http://www.treesoft.cn/dms.html)和ehcache的系统[ehcache-monitor-kit](http://terracotta.org/downloads/open-source/)。
+* 跨站点session一致性
 * 集成WebSocket，实现android客户端扫码登录。
 * 实现跨域单点登录。
 
